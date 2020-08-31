@@ -1,0 +1,7 @@
+<h1>Game: {{id}}</h1>
+<h2>{{player.name}} VS {{opponent.name}}</h2>
+<button mat-raised-button (click)="logGame()">Log</button>
+
+<button mat-raised-button (click)="recruitCard(3)">recruit</button>
+
+<app-card *ngFor="let card of game.board; index as i" [card]="card.card"></app-card>

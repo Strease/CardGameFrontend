@@ -4,6 +4,9 @@ import { NativeScriptModule } from '@nativescript/angular';
 import { AppRoutingModule } from '@src/app/app-routing.module';
 import { AppComponent } from '@src/app/app.component';
 import { HomeComponent } from '@src/app/home/home.component';
+import { TestboardComponent } from '@src/app/testboard/testboard.component';
+import { CardComponent } from '@src/app/card/card.component';
+import { GameComponent } from '@src/app/game/game.component';
 
 
 // Uncomment and add to NgModule imports if you need to use two-way binding and/or HTTP wrapper
@@ -13,6 +16,9 @@ import { HomeComponent } from '@src/app/home/home.component';
   declarations: [
     AppComponent,
     HomeComponent,
+    TestboardComponent,
+    CardComponent,
+    GameComponent,
   ],
   imports: [
     NativeScriptModule,

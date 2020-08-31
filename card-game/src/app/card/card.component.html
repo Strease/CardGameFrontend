@@ -1,0 +1,6 @@
+<mat-card class="game-card">
+    <h2 class="name">{{card.name}}</h2>
+    <h2 class="hp">{{card.maxHp}}</h2>
+
+    <p *ngFor="let abilitie of card.abilities; let i = index">{{abilitie}}</p>
+</mat-card>

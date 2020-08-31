@@ -7,6 +7,7 @@ export class Game {
   id: string;
   playerA: Player;
   playerB: Player;
+  board: Card[];
 
   constructor(){
     this.playerA = new Player();
@@ -16,7 +17,16 @@ export class Game {
 
 export class Player{
   name: string = "";
+  id: string = "";
 }
+
+export class Card{
+  id: number = 0;
+  name: string = "";
+  maxHp: number = 0;
+  abilities: string[];
+}
+
 
 const endpoint = 'http://localhost:8080/';
 
@@ -27,11 +37,35 @@ export class RestService {
 
   constructor(private http: HttpClient) { }
 
+  getAllCards(): Observable<any> {
+    return this.http.get<Card>(endpoint + 'cards/').pipe(
+      catchError(this.handleError)
+    );
+  }
+
   getGame(id: string): Observable<any> {
     return this.http.get<Game>(endpoint + 'game/' + id).pipe(
       catchError(this.handleError)
     );
   }
+
+  createTestGame(): Observable<any> {
+    return this.http.post(endpoint + 'game/', {}).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  recruitCard(gameId:string, playerId: string, cardId: number): Observable<any> {
+    let requestBody = {
+      "gameId": gameId, 
+      "playerId": playerId, 
+      "cardId": cardId
+    }
+    return this.http.post(endpoint + 'game/recruit/', requestBody).pipe(
+      catchError(this.handleError)
+    );
+  }
+
 
   private handleError(error: HttpErrorResponse): any {
     if (error.error instanceof ErrorEvent) {
