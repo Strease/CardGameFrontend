@@ -10,6 +10,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import {MatButtonModule} from '@angular/material/button';
 import {MatCardModule} from '@angular/material/card';
+import {MatExpansionModule} from '@angular/material/expansion';
+
 import { TestboardComponent } from '@src/app/testboard/testboard.component';
 import { CardComponent } from '@src/app/card/card.component';
 import { GameComponent } from '@src/app/game/game.component';
@@ -28,7 +30,8 @@ import { GameComponent } from '@src/app/game/game.component';
     HttpClientModule,
     BrowserAnimationsModule,
     MatButtonModule,
-    MatCardModule
+    MatCardModule,
+    MatExpansionModule
   ],
   providers: [],
   bootstrap: [AppComponent]

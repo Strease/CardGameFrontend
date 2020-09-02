@@ -1,5 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { Card } from '../rest.service';
+import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
+import { Card, BoardCard } from '../rest.service';
 
 @Component({
   selector: 'app-card',
@@ -7,7 +7,17 @@ import { Card } from '../rest.service';
   styleUrls: ['./card.component.scss']
 })
 export class CardComponent implements OnInit {
-  @Input() card: Card;
+  @Input() boardCard: BoardCard;
+  @Output() pickAbility = new EventEmitter<string>();
+  @Output() targetCard = new EventEmitter();
+
+  callPickAbility(ability:string): void {
+    this.pickAbility.next(ability);
+  }
+
+  callTargetCard(): void{
+    this.targetCard.next();
+  }
 
   constructor() { }
 

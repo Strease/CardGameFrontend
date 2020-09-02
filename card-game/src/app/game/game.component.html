@@ -1,7 +1,35 @@
 <h1>Game: {{id}}</h1>
-<h2>{{player.name}} VS {{opponent.name}}</h2>
-<button mat-raised-button (click)="logGame()">Log</button>
+<button mat-raised-button (click)="recruitCard(3)">recruit</button><br/>
 
-<button mat-raised-button (click)="recruitCard(3)">recruit</button>
+<ng-container *ngIf="game != null && playerSide != null">
+    <h2>Opponents board:</h2>
+    <ng-container *ngFor="let boardCard of game.board; index as i" >
+        <app-card (targetCard)="targetTurn(boardCard.id)" *ngIf="playerSide != boardCard.playerSide" [boardCard]="boardCard"></app-card>
+    </ng-container><br/>
 
-<app-card *ngFor="let card of game.board; index as i" [card]="card.card"></app-card>
+
+    <h2>My board:</h2>
+    <ng-container *ngFor="let boardCard of game.board; index as i" >
+        <app-card (targetCard)="targetTurn(boardCard.id)" (pickAbility)="pickTurn(boardCard.id, $event)" *ngIf="playerSide == boardCard.playerSide" [boardCard]="boardCard"></app-card>
+    </ng-container><br/>
+
+    <ng-container *ngIf="playerSide == 'A'">
+        <ng-container *ngIf="game.currentTurn.cardAbilityPlayerA != null"> I picked: {{ game.currentTurn.cardAbilityPlayerA.ability }} </ng-container><br/>
+        <ng-container *ngIf="game.currentTurn.cardAbilityPlayerB != null"> He picked: {{ game.currentTurn.cardAbilityPlayerB.ability }} </ng-container><br/>
+    </ng-container><br/>
+
+    <ng-container *ngIf="playerSide == 'B'">
+        <ng-container *ngIf="game.currentTurn.cardAbilityPlayerB != null"> I picked: {{ game.currentTurn.cardAbilityPlayerB.ability }} </ng-container><br/>
+        <ng-container *ngIf="game.currentTurn.cardAbilityPlayerA != null"> He picked: {{ game.currentTurn.cardAbilityPlayerA.ability }} </ng-container><br/>
+    </ng-container><br/>
+    
+</ng-container>
+
+<mat-expansion-panel hideToggle class="expander">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Game in json
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <p>{{ game | json }}</p>
+  </mat-expansion-panel>

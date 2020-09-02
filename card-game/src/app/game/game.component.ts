@@ -1,5 +1,8 @@
-import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
-import { RestService, Game, Card, Player } from '../rest.service';
+import { Component, Input, OnInit, EventEmitter } from '@angular/core';
+import { RestService, Game, Player } from '../rest.service';
+import { interval } from 'rxjs';
+import { takeUntil } from 'rxjs/internal/operators';
+import { Observable } from '@nativescript/core';
 
 @Component({
   selector: 'app-game',
@@ -10,33 +13,32 @@ export class GameComponent implements OnInit {
   
   @Input() id: string = null;
   @Input() player: Player = new Player();
-  opponent: Player = new Player();
-  game: Game = new Game;
+  game: Game = null;
+  playerSide: string = null;
 
-  constructor(public rest: RestService) { }
-
-  ngOnInit(): void {}
-
-  ngOnChanges() {
-    if(this.id != null && this.player.id != null){
-      this.getGame();
-    }
-   
-  }
-
-  getGame(): void {
-    this.rest.getGame(this.id).subscribe((resp: any) => {
-      this.game = resp;
-      if(this.opponent.id != null && this.player.id == this.game.playerA.id){
-        this.opponent = this.game.playerB;
-      }else if(this.opponent.id != null && this.player.id == this.game.playerB.id){
-        this.opponent = this.game.playerA
+  constructor(public rest: RestService) { 
+    // Set interval for GET on game
+    interval(1000).subscribe(x => {
+      if(this.id != null){
+        this.rest.getGame((this.id)).subscribe((resp: any) => {
+          this.game = resp;
+          // Set playerside
+          if(this.playerSide == null && this.game != null){
+            this.getPlayerSide()
+          }
+        });
       }
     });
   }
 
-  logGame(){
-    console.log(this.game);
+  ngOnInit(): void { }
+
+  getPlayerSide(){
+      if(this.player.id == this.game.playerA.id){
+        this.playerSide = 'A';
+      }else if(this.player.id == this.game.playerB.id){
+        this.playerSide = 'B';
+      }
   }
 
   recruitCard(cardId:number){
@@ -45,4 +47,15 @@ export class GameComponent implements OnInit {
     });
   }
 
+  pickTurn(boardCardId:string, ability:string){
+    this.rest.pickTurn(this.id, this.player.id, boardCardId, ability).subscribe((resp: any) => {
+      this.game = resp;
+    });
+  }
+
+  targetTurn(targetId:string){
+    this.rest.targetTurn(this.id, this.player.id, targetId).subscribe((resp: any) => {
+      this.game = resp;
+    });
+  }
 }

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { catchError } from 'rxjs/internal/operators';
-import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 
 export class Game {
@@ -8,6 +8,7 @@ export class Game {
   playerA: Player;
   playerB: Player;
   board: Card[];
+  currentTurn: Turn;
 
   constructor(){
     this.playerA = new Player();
@@ -25,6 +26,22 @@ export class Card{
   name: string = "";
   maxHp: number = 0;
   abilities: string[];
+  playerSide: string = "";
+}
+
+export class BoardCard{
+  id: string = "";
+  currentHp: number = 0;
+  card: Card = new Card();
+}
+
+export class Turn{
+  abilityResultPlayerA: string;
+  abilityResultPlayerB: string;
+  cardAbilityPlayerA: string;
+  cardAbilityPlayerB: string;
+  targetPlayerA: string;
+  targetPlayerB: string;
 }
 
 
@@ -66,6 +83,30 @@ export class RestService {
     );
   }
 
+  pickTurn(gameId:string, playerId: string, boardCardId: string, ability:string): Observable<any> {
+    let requestBody = {
+      "gameId": gameId, 
+      "playerId": playerId, 
+      "cardAbility": {
+        "boardCardId": boardCardId,
+        "ability": ability
+      }
+    }
+    return this.http.post(endpoint + 'game/pickturn/', requestBody).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  targetTurn(gameId:string, playerId: string, targetId: string): Observable<any> {
+    let requestBody = {
+      "gameId": gameId, 
+      "playerId": playerId, 
+      "targetId": targetId
+    }
+    return this.http.post(endpoint + 'game/targetturn/', requestBody).pipe(
+      catchError(this.handleError)
+    );
+  }
 
   private handleError(error: HttpErrorResponse): any {
     if (error.error instanceof ErrorEvent) {
