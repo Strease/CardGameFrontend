@@ -2,5 +2,5 @@
     <h2 (click)="callTargetCard()" class="name">{{boardCard.card.name}}</h2>
     <h2 class="hp">{{boardCard.currentHp}}</h2>
 
-    <p (click)="callPickAbility(ability)" *ngFor="let ability of boardCard.card.abilities; let i = index">{{ability}}</p>
+    <p (click)="callPickAbility(ability.abilityId)" *ngFor="let ability of boardCard.card.abilities; let i = index">{{ability.baseAbility}}</p>
 </mat-card>

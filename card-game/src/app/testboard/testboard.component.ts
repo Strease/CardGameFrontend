@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { RestService, Game, Card } from '../rest.service';
+import { RestService, Game } from '../rest.service';
 
 @Component({
   selector: 'app-testboard',
@@ -23,7 +23,7 @@ export class TestboardComponent implements OnInit {
   createGame(): void {
     this.rest.createTestGame().subscribe((resp: any) => {
       this.game = resp;
-      localStorage.setItem('gameId', this.game.id);
+      localStorage.setItem('gameId', this.game.gameId);
     });
   }
 

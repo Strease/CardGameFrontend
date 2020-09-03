@@ -1,8 +1,6 @@
 import { Component, Input, OnInit, EventEmitter } from '@angular/core';
-import { RestService, Game, Player } from '../rest.service';
+import { RestService, Game, User } from '../rest.service';
 import { interval } from 'rxjs';
-import { takeUntil } from 'rxjs/internal/operators';
-import { Observable } from '@nativescript/core';
 
 @Component({
   selector: 'app-game',
@@ -12,7 +10,7 @@ import { Observable } from '@nativescript/core';
 export class GameComponent implements OnInit {
   
   @Input() id: string = null;
-  @Input() player: Player = new Player();
+  @Input() player: User = new User();
   game: Game = null;
   playerSide: string = null;
 
@@ -34,27 +32,27 @@ export class GameComponent implements OnInit {
   ngOnInit(): void { }
 
   getPlayerSide(){
-      if(this.player.id == this.game.playerA.id){
+      if(this.player.userId == this.game.playerA.userId){
         this.playerSide = 'A';
-      }else if(this.player.id == this.game.playerB.id){
+      }else if(this.player.userId == this.game.playerB.userId){
         this.playerSide = 'B';
       }
   }
 
-  recruitCard(cardId:number){
-    this.rest.recruitCard(this.id, this.player.id, cardId).subscribe((resp: any) => {
+  recruitCard(cardId:string){
+    this.rest.recruitCard(this.id, this.player.userId, cardId).subscribe((resp: any) => {
       this.game = resp;
     });
   }
 
-  pickTurn(boardCardId:string, ability:string){
-    this.rest.pickTurn(this.id, this.player.id, boardCardId, ability).subscribe((resp: any) => {
+  pickTurn(boardCardId:string, abilityId:string){
+    this.rest.pickTurn(this.id, this.player.userId, boardCardId, abilityId).subscribe((resp: any) => {
       this.game = resp;
     });
   }
 
   targetTurn(targetId:string){
-    this.rest.targetTurn(this.id, this.player.id, targetId).subscribe((resp: any) => {
+    this.rest.targetTurn(this.id, this.player.userId, targetId).subscribe((resp: any) => {
       this.game = resp;
     });
   }

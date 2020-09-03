@@ -1,16 +1,16 @@
 <h1>Game: {{id}}</h1>
-<button mat-raised-button (click)="recruitCard(3)">recruit</button><br/>
+<button mat-raised-button (click)="recruitCard('00000000-aaaa-1113-2222-bbbbbbbbbbbb')">recruit</button><br/>
 
 <ng-container *ngIf="game != null && playerSide != null">
     <h2>Opponents board:</h2>
     <ng-container *ngFor="let boardCard of game.board; index as i" >
-        <app-card (targetCard)="targetTurn(boardCard.id)" *ngIf="playerSide != boardCard.playerSide" [boardCard]="boardCard"></app-card>
+        <app-card (targetCard)="targetTurn(boardCard.boardCardId)" *ngIf="playerSide != boardCard.playerSide" [boardCard]="boardCard"></app-card>
     </ng-container><br/>
 
 
     <h2>My board:</h2>
     <ng-container *ngFor="let boardCard of game.board; index as i" >
-        <app-card (targetCard)="targetTurn(boardCard.id)" (pickAbility)="pickTurn(boardCard.id, $event)" *ngIf="playerSide == boardCard.playerSide" [boardCard]="boardCard"></app-card>
+        <app-card (targetCard)="targetTurn(boardCard.boardCardId)" (pickAbility)="pickTurn(boardCard.boardCardId, $event)" *ngIf="playerSide == boardCard.playerSide" [boardCard]="boardCard"></app-card>
     </ng-container><br/>
 
     <ng-container *ngIf="playerSide == 'A'">

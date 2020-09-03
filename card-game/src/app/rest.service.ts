@@ -4,25 +4,25 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 
 export class Game {
-  id: string;
-  playerA: Player;
-  playerB: Player;
+  gameId: string;
+  playerA: User;
+  playerB: User;
   board: Card[];
   currentTurn: Turn;
 
   constructor(){
-    this.playerA = new Player();
-    this.playerB = new Player();
+    this.playerA = new User();
+    this.playerB = new User();
   }
 }
 
-export class Player{
+export class User{
+  userId: string = "";
   name: string = "";
-  id: string = "";
 }
 
 export class Card{
-  id: number = 0;
+  cardId: number = 0;
   name: string = "";
   maxHp: number = 0;
   abilities: string[];
@@ -30,12 +30,13 @@ export class Card{
 }
 
 export class BoardCard{
-  id: string = "";
+  boardCardId: string = "";
   currentHp: number = 0;
   card: Card = new Card();
 }
 
 export class Turn{
+  turnId :string;
   abilityResultPlayerA: string;
   abilityResultPlayerB: string;
   cardAbilityPlayerA: string;
@@ -72,7 +73,7 @@ export class RestService {
     );
   }
 
-  recruitCard(gameId:string, playerId: string, cardId: number): Observable<any> {
+  recruitCard(gameId:string, playerId: string, cardId: string): Observable<any> {
     let requestBody = {
       "gameId": gameId, 
       "playerId": playerId, 
@@ -83,14 +84,12 @@ export class RestService {
     );
   }
 
-  pickTurn(gameId:string, playerId: string, boardCardId: string, ability:string): Observable<any> {
+  pickTurn(gameId:string, playerId: string, cardId: string, abilityId:string): Observable<any> {
     let requestBody = {
       "gameId": gameId, 
-      "playerId": playerId, 
-      "cardAbility": {
-        "boardCardId": boardCardId,
-        "ability": ability
-      }
+      "playerId": playerId,
+      "cardId": cardId,
+      "abilityId": abilityId
     }
     return this.http.post(endpoint + 'game/pickturn/', requestBody).pipe(
       catchError(this.handleError)
