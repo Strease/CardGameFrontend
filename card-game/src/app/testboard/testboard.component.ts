@@ -9,27 +9,23 @@ import { RestService, Game } from '../rest.service';
 
 export class TestboardComponent implements OnInit {
 
-  game: Game = new Game();
+  gameId: string;
+  playerA: string = '00000000-aaaa-1111-2222-bbbbbbbbbbbb';
+  playerB: string = '00000001-aaaa-1111-2222-bbbbbbbbbbbb';
 
   constructor(
     public rest: RestService) { }
 
   ngOnInit(): void {
     if(localStorage.getItem('gameId') != null){
-      this.getGame();
+      this.gameId = localStorage.getItem('gameId');
     }
   }
 
   createGame(): void {
     this.rest.createTestGame().subscribe((resp: any) => {
-      this.game = resp;
-      localStorage.setItem('gameId', this.game.gameId);
-    });
-  }
-
-  getGame(): void {
-    this.rest.getGame(localStorage.getItem('gameId')).subscribe((resp: any) => {
-      this.game = resp;
+      localStorage.setItem('gameId', resp);
+      this.gameId = resp;
     });
   }
 }

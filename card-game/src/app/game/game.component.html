@@ -1,28 +1,20 @@
 <h1>Game: {{id}}</h1>
-<button mat-raised-button (click)="recruitCard('00000000-aaaa-1113-2222-bbbbbbbbbbbb')">recruit</button><br/>
+<h2>Player: {{playerId}}</h2>
 
-<ng-container *ngIf="game != null && playerSide != null">
+<button *ngFor="let card of playerCollection; index as i" mat-raised-button (click)="recruitCard(card.cardId)">{{card.name}}</button><br/>
+
+<ng-container *ngIf="game != null">
     <h2>Opponents board:</h2>
-    <ng-container *ngFor="let boardCard of game.board; index as i" >
-        <app-card (targetCard)="targetTurn(boardCard.boardCardId)" *ngIf="playerSide != boardCard.playerSide" [boardCard]="boardCard"></app-card>
+    <ng-container *ngFor="let boardCard of game.opponentsBoard; index as i" >
+        <app-card (targetCard)="targetTurn(boardCard.boardCardId)" (pickAbility)="pickTurn(boardCard.boardCardId, $event)" [boardCard]="boardCard"></app-card>
     </ng-container><br/>
-
 
     <h2>My board:</h2>
-    <ng-container *ngFor="let boardCard of game.board; index as i" >
-        <app-card (targetCard)="targetTurn(boardCard.boardCardId)" (pickAbility)="pickTurn(boardCard.boardCardId, $event)" *ngIf="playerSide == boardCard.playerSide" [boardCard]="boardCard"></app-card>
+    <ng-container *ngFor="let boardCard of game.myBoard; index as i" >
+        <app-card (targetCard)="targetTurn(boardCard.boardCardId)" (pickAbility)="pickTurn(boardCard.boardCardId, $event)" [boardCard]="boardCard"></app-card>
     </ng-container><br/>
 
-    <ng-container *ngIf="playerSide == 'A'">
-        <ng-container *ngIf="game.currentTurn.cardAbilityPlayerA != null"> I picked: {{ game.currentTurn.cardAbilityPlayerA.ability }} </ng-container><br/>
-        <ng-container *ngIf="game.currentTurn.cardAbilityPlayerB != null"> He picked: {{ game.currentTurn.cardAbilityPlayerB.ability }} </ng-container><br/>
-    </ng-container><br/>
-
-    <ng-container *ngIf="playerSide == 'B'">
-        <ng-container *ngIf="game.currentTurn.cardAbilityPlayerB != null"> I picked: {{ game.currentTurn.cardAbilityPlayerB.ability }} </ng-container><br/>
-        <ng-container *ngIf="game.currentTurn.cardAbilityPlayerA != null"> He picked: {{ game.currentTurn.cardAbilityPlayerA.ability }} </ng-container><br/>
-    </ng-container><br/>
-    
+    <ng-container *ngIf="game.myAbility != null"> I picked: {{ game.myAbility }} </ng-container><br/>
 </ng-container>
 
 <mat-expansion-panel hideToggle class="expander">

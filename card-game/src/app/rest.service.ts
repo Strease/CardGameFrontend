@@ -5,20 +5,8 @@ import { Observable, throwError } from 'rxjs';
 
 export class Game {
   gameId: string;
-  playerA: User;
-  playerB: User;
-  board: Card[];
-  currentTurn: Turn;
-
-  constructor(){
-    this.playerA = new User();
-    this.playerB = new User();
-  }
-}
-
-export class User{
-  userId: string = "";
-  name: string = "";
+  myBoard: Card[];
+  opponentsBoard: Card[];
 }
 
 export class Card{
@@ -35,17 +23,6 @@ export class BoardCard{
   card: Card = new Card();
 }
 
-export class Turn{
-  turnId :string;
-  abilityResultPlayerA: string;
-  abilityResultPlayerB: string;
-  cardAbilityPlayerA: string;
-  cardAbilityPlayerB: string;
-  targetPlayerA: string;
-  targetPlayerB: string;
-}
-
-
 const endpoint = 'http://localhost:8080/';
 
 @Injectable({
@@ -56,13 +33,19 @@ export class RestService {
   constructor(private http: HttpClient) { }
 
   getAllCards(): Observable<any> {
-    return this.http.get<Card>(endpoint + 'cards/').pipe(
+    return this.http.get<Card[]>(endpoint + 'cards/').pipe(
       catchError(this.handleError)
     );
   }
 
-  getGame(id: string): Observable<any> {
-    return this.http.get<Game>(endpoint + 'game/' + id).pipe(
+  getUserCollection(userId: string): Observable<any> {
+    return this.http.get<Card[]>(endpoint + 'user/collection/' + userId).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  getGame(gameId: string, playerId: string): Observable<any> {
+    return this.http.get<Game>(endpoint + 'game/' + gameId + '/' + playerId).pipe(
       catchError(this.handleError)
     );
   }
