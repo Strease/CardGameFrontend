@@ -5,20 +5,21 @@ import { Observable, throwError } from 'rxjs';
 
 export class Game {
   gameId: string;
-  myBoard: Card[];
-  opponentsBoard: Card[];
+  myBoard: BoardCard[];
+  opponentsBoard: BoardCard[];
+  turnstate: string;
 }
 
 export class Card{
-  cardId: number = 0;
-  name: string = "";
+  cardId: string = '';
+  name: string = '';
   maxHp: number = 0;
   abilities: string[];
-  playerSide: string = "";
+  playerSide: string = '';
 }
 
 export class BoardCard{
-  boardCardId: string = "";
+  boardCardId: string = '';
   currentHp: number = 0;
   card: Card = new Card();
 }

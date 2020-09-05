@@ -1,22 +1,62 @@
-<h1>Game: {{id}}</h1>
-<h2>Player: {{playerId}}</h2>
 
-<button *ngFor="let card of playerCollection; index as i" mat-raised-button (click)="recruitCard(card.cardId)">{{card.name}}</button><br/>
+<div *ngIf="game != null" class="game_container">
+    <div class="guide_container">
+        <ng-container *ngIf="game.turnstate === 'RECRUITING'">
+            <h2>Pick your team:</h2>
+            <mat-card class="recruitCard" *ngFor="let card of playerCollection; index as i" mat-raised-button (click)="recruitCard(card.cardId)">
+               <h2>{{card.name}}</h2>
+               <p *ngFor="let ability of card.abilities">{{ ability.baseAbility}}</p>
+            </mat-card>
+        </ng-container>
+        
+        <h2 *ngIf="game.turnstate === 'PICKING' && game.myAbility === null">Choose an ability</h2>
+        <h2 *ngIf="game.turnstate === 'PICKING' && game.myAbility != null">Waiting for opponent</h2>
 
-<ng-container *ngIf="game != null">
-    <h2>Opponents board:</h2>
-    <ng-container *ngFor="let boardCard of game.opponentsBoard; index as i" >
-        <app-card (targetCard)="targetTurn(boardCard.boardCardId)" (pickAbility)="pickTurn(boardCard.boardCardId, $event)" [boardCard]="boardCard"></app-card>
-    </ng-container><br/>
+        <h2 *ngIf="game.turnstate === 'TARGETING' && game.myTarget === null">Pick a {{ game.myAbilityResult.targetType}} target</h2>
+        <h2 *ngIf="game.turnstate === 'TARGETING' && game.myTarget != null">Waiting for opponent</h2>
+    </div>
+    
+    <div class="board_container">
+        <div class="board_side">
+            <h2>{{game.opponentsName}}'s team</h2>
+            <ng-container *ngFor="let boardCard of game.opponentsBoard; index as i" >
+                <app-card  (cardClicked)="cardClicked(boardCard.boardCardId, $event)"
+                [boardCard]="boardCard" [pickedAbility]="boardCard.boardCardId === game.opponentsUsedCard ? game.opponentsAbility.baseAbility : null "
+                [target]="boardCard.boardCardId === game.myTarget"></app-card>
+            </ng-container>
+        </div>
 
-    <h2>My board:</h2>
-    <ng-container *ngFor="let boardCard of game.myBoard; index as i" >
-        <app-card (targetCard)="targetTurn(boardCard.boardCardId)" (pickAbility)="pickTurn(boardCard.boardCardId, $event)" [boardCard]="boardCard"></app-card>
-    </ng-container><br/>
+        <div class="actions_container">
+            <ng-container *ngIf="game.lastTurn != null">
+                <p *ngIf="game.lastTurn.opponentsAbilityResult.effect != 'NONE'">
+                    {{getBoardCardById(game.lastTurn.opponentsUsedCard).card.name}} {{game.lastTurn.opponentsAbility.baseAbility}} 
+                    {{game.lastTurn.opponentsAbilityResult.amount}} {{getBoardCardById(game.lastTurn.opponentsTarget).card.name}}
+                </p>
+                <p *ngIf="game.lastTurn.opponentsAbilityResult.effect === 'NONE'">
+                    {{getBoardCardById(game.lastTurn.opponentsUsedCard).card.name}} {{game.lastTurn.opponentsAbility.baseAbility}}
+                </p>
 
-    <ng-container *ngIf="game.myAbility != null"> I picked: {{ game.myAbility }} </ng-container><br/>
-</ng-container>
+                <p *ngIf="game.lastTurn.myAbilityResult.effect != 'NONE'">
+                    {{getBoardCardById(game.lastTurn.myUsedCard).card.name}} {{game.lastTurn.myAbility.baseAbility}} 
+                    {{game.lastTurn.myAbilityResult.amount}} {{getBoardCardById(game.lastTurn.myTarget).card.name}}
+                </p>
+                <p *ngIf="game.lastTurn.myAbilityResult.effect === 'NONE'">
+                    {{getBoardCardById(game.lastTurn.myUsedCard).card.name}} {{game.lastTurn.myAbility.baseAbility}}
+                </p>
+            </ng-container>
+        </div>
 
+        <div class="board_side my_board">
+            <ng-container *ngFor="let boardCard of game.myBoard; index as i" >
+                <app-card (cardClicked)="cardClicked(boardCard.boardCardId, $event)" 
+            [boardCard]="boardCard" [pickedAbility]="boardCard.boardCardId === game.myUsedCard ? game.myAbility.baseAbility : null "></app-card>
+            </ng-container>
+            <h2>My team</h2>
+        </div>     
+    </div>
+</div>
+
+<!-- 
 <mat-expansion-panel hideToggle class="expander">
     <mat-expansion-panel-header>
       <mat-panel-title>
@@ -24,4 +64,4 @@
       </mat-panel-title>
     </mat-expansion-panel-header>
     <p>{{ game | json }}</p>
-  </mat-expansion-panel>
+  </mat-expansion-panel> -->

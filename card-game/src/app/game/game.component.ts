@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { RestService, Game, Card } from '../rest.service';
+import { RestService, Game, Card, BoardCard } from '../rest.service';
 import { interval } from 'rxjs';
 
 @Component({
@@ -19,7 +19,9 @@ export class GameComponent implements OnInit {
     interval(1500).subscribe(x => {
       if(this.id != null && this.playerId != null){
         this.rest.getGame(this.id, this.playerId).subscribe((resp: any) => {
-          this.game = resp;
+          if(this.game != resp){
+            this.game = resp;
+          }
         });
       }
       if(this.playerCollection == null && this.playerId != null){
@@ -30,9 +32,19 @@ export class GameComponent implements OnInit {
 
   ngOnInit(): void { }
 
+  cardClicked(cardId: string, ability: string){
+    if(this.game.turnstate === 'PICKING'){
+      this.pickTurn(cardId, ability);
+    }
+    if(this.game.turnstate === 'TARGETING'){
+      this.targetTurn(cardId);
+    }
+
+  }
+
   getUserCollection(){
-    this.rest.getUserCollection(this.playerId).subscribe((resp: any) => {
-      this.playerCollection = resp.cardCollection;
+    this.rest.getAllCards().subscribe((resp: any) => {
+      this.playerCollection = resp;
     });
   }
 
@@ -52,6 +64,20 @@ export class GameComponent implements OnInit {
     this.rest.targetTurn(this.id, this.playerId, targetId).subscribe((resp: any) => {
       this.game = resp;
     });
+  }
+
+  getBoardCardById(boardCardId:string){
+    for(let boardCard of this.game.myBoard){
+      if(boardCard.boardCardId === boardCardId){
+        return boardCard;
+      }
+    }
+    for(let boardCard of this.game.opponentsBoard){
+      if(boardCard.boardCardId === boardCardId){
+        return boardCard;
+      }
+    }
+
   }
 
 }

@@ -1,6 +1,10 @@
-<mat-card class="game-card">
-    <h2 (click)="callTargetCard()" class="name">{{boardCard.card.name}}</h2>
-    <h2 class="hp">{{boardCard.currentHp}}</h2>
+<mat-card class="game-card" [ngClass]="{'picked': pickedAbility != null, 'target': target === true , 'dead' : boardCard.isAlive === false, 'powerUp' : boardCard.isPoweredUp === true }">
 
-    <p (click)="callPickAbility(ability.abilityId)" *ngFor="let ability of boardCard.card.abilities; let i = index">{{ability.baseAbility}}</p>
+    <h2 (click)="callCardClick('')" class="name">{{boardCard.card.name}}</h2>
+
+    <h2 [ngClass]="{'damaged': boardCard.currentHp < boardCard.card.maxHp }" class="hp"
+    [matTooltip]="'max: ' + boardCard.card.maxHp" matTooltipPosition="above">{{boardCard.currentHp}}</h2>
+
+    <p (click)="callCardClick(ability.abilityId)" *ngFor="let ability of boardCard.card.abilities; let i = index"
+    [ngClass]="{'pickedAbility': pickedAbility === ability.baseAbility}">{{ability.baseAbility}}</p><br/>
 </mat-card>

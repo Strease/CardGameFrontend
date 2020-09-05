@@ -11,3 +11,32 @@
     right: 18px;
     top: 18px;
 }
+
+.power{
+    font-size: 12px;
+}
+
+.picked{
+    background-color: gainsboro;
+}
+
+.pickedAbility{
+    font-weight: bold;
+    color: red;
+}
+
+.target{
+    border: 2px solid red;
+}
+
+.damaged{
+    color: red;
+}
+
+.dead{
+    background-color:black;
+}
+
+.powerUp{
+    box-shadow:0px 0px 0px 2px green inset;
+}

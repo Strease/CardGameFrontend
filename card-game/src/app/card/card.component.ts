@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
-import { Card, BoardCard } from '../rest.service';
+import { BoardCard } from '../rest.service';
 
 @Component({
   selector: 'app-card',
@@ -8,15 +8,12 @@ import { Card, BoardCard } from '../rest.service';
 })
 export class CardComponent implements OnInit {
   @Input() boardCard: BoardCard;
-  @Output() pickAbility = new EventEmitter<string>();
-  @Output() targetCard = new EventEmitter();
+  @Input() pickedAbility: string;
+  @Input() target: boolean;
+  @Output() cardClicked = new EventEmitter<string>();
 
-  callPickAbility(ability:string): void {
-    this.pickAbility.next(ability);
-  }
-
-  callTargetCard(): void{
-    this.targetCard.next();
+  callCardClick(ability:string): void {
+    this.cardClicked.next(ability);
   }
 
   constructor() { }

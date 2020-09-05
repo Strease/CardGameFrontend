@@ -1,3 +1,48 @@
 .expander{
     max-width: 800px;
 }
+
+.actions_container, .board_container, .game_container{
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.game_container{
+    margin: 20px;
+    margin-right:60px;
+    max-width: 550px;
+}
+
+.board_side{
+    background-color: #bf9221;
+    border-radius: 5px;
+    padding: 20px;
+    min-width: 520px;
+    min-height: 300px;
+    h2{
+        margin:10px;
+    }
+}
+
+.actions_container{
+    margin-top: 20px;
+    margin-bottom: 20px;
+    text-align: center;
+    background-color: #866410;
+    border-radius: 5px;
+    color: white;
+    width: 100%;
+    p{
+        margin: 15px;
+    }
+}
+
+.recruitCard{
+    width: 110px;
+    height: 150px;
+    display: inline-block;
+    margin-right: 5px;
+    margin-bottom: 5px;
+    vertical-align: middle;
+    cursor: pointer;
+}

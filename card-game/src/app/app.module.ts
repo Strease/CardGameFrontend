@@ -11,6 +11,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MatButtonModule} from '@angular/material/button';
 import {MatCardModule} from '@angular/material/card';
 import {MatExpansionModule} from '@angular/material/expansion';
+import {MatTooltipModule} from '@angular/material/tooltip';
 
 import { TestboardComponent } from '@src/app/testboard/testboard.component';
 import { CardComponent } from '@src/app/card/card.component';
@@ -31,7 +32,8 @@ import { GameComponent } from '@src/app/game/game.component';
     BrowserAnimationsModule,
     MatButtonModule,
     MatCardModule,
-    MatExpansionModule
+    MatExpansionModule,
+    MatTooltipModule
   ],
   providers: [],
   bootstrap: [AppComponent]
