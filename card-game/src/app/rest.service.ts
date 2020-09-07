@@ -5,6 +5,7 @@ import { Observable, throwError } from 'rxjs';
 
 export class Game {
   gameId: string;
+  updateCounter: number;
   myBoard: BoardCard[];
   opponentsBoard: BoardCard[];
   turnstate: string;

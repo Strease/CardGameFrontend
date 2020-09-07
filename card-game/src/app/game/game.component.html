@@ -1,14 +1,6 @@
 
 <div *ngIf="game != null" class="game_container">
-    <div class="guide_container">
-        <ng-container *ngIf="game.turnstate === 'RECRUITING'">
-            <h2>Pick your team:</h2>
-            <mat-card class="recruitCard" *ngFor="let card of playerCollection; index as i" mat-raised-button (click)="recruitCard(card.cardId)">
-               <h2>{{card.name}}</h2>
-               <p *ngFor="let ability of card.abilities">{{ ability.baseAbility}}</p>
-            </mat-card>
-        </ng-container>
-        
+    <div class="guide_container">      
         <h2 *ngIf="game.turnstate === 'PICKING' && game.myAbility === null">Choose an ability</h2>
         <h2 *ngIf="game.turnstate === 'PICKING' && game.myAbility != null">Waiting for opponent</h2>
 
@@ -25,21 +17,33 @@
                 [target]="boardCard.boardCardId === game.myTarget"></app-card>
             </ng-container>
         </div>
-
+        <!-- TODO: ACTIONS Component -->
         <div class="actions_container">
             <ng-container *ngIf="game.lastTurn != null">
-                <p *ngIf="game.lastTurn.opponentsAbilityResult.effect != 'NONE'">
-                    {{getBoardCardById(game.lastTurn.opponentsUsedCard).card.name}} {{game.lastTurn.opponentsAbility.baseAbility}} 
-                    {{game.lastTurn.opponentsAbilityResult.amount}} {{getBoardCardById(game.lastTurn.opponentsTarget).card.name}}
-                </p>
+                <ng-container *ngIf="game.lastTurn.opponentsAbilityResult.effect != 'NONE'">
+                    <p *ngIf="game.lastTurn.opponentsAbilityResult.targetType == 'NONE' || game.lastTurn.opponentsAbilityResult.targetType == 'ALLFRIENDLY' || game.lastTurn.opponentsAbilityResult.targetType == 'ALLENEMY' || game.lastTurn.opponentsAbilityResult.targetType == 'TAUNTED'">
+                        {{getBoardCardById(game.lastTurn.opponentsUsedCard).card.name}} {{game.lastTurn.opponentsAbility.baseAbility}} 
+                        {{game.lastTurn.opponentsAbilityResult.amount}} {{game.lastTurn.opponentsAbilityResult.targetType}}
+                    </p>
+                    <p *ngIf="game.lastTurn.opponentsAbilityResult.targetType == 'ANY' || game.lastTurn.opponentsAbilityResult.targetType == 'FRIENDLY' || game.lastTurn.opponentsAbilityResult.targetType == 'ENEMY'">
+                        {{getBoardCardById(game.lastTurn.opponentsUsedCard).card.name}} {{game.lastTurn.opponentsAbility.baseAbility}} 
+                        {{game.lastTurn.opponentsAbilityResult.amount}} {{getBoardCardById(game.lastTurn.opponentsTarget).card.name}}
+                    </p>
+                </ng-container>
                 <p *ngIf="game.lastTurn.opponentsAbilityResult.effect === 'NONE'">
                     {{getBoardCardById(game.lastTurn.opponentsUsedCard).card.name}} {{game.lastTurn.opponentsAbility.baseAbility}}
                 </p>
 
-                <p *ngIf="game.lastTurn.myAbilityResult.effect != 'NONE'">
-                    {{getBoardCardById(game.lastTurn.myUsedCard).card.name}} {{game.lastTurn.myAbility.baseAbility}} 
-                    {{game.lastTurn.myAbilityResult.amount}} {{getBoardCardById(game.lastTurn.myTarget).card.name}}
-                </p>
+                <ng-container *ngIf="game.lastTurn.myAbilityResult.effect != 'NONE'">
+                    <p *ngIf="game.lastTurn.myAbilityResult.targetType == 'NONE' || game.lastTurn.myAbilityResult.targetType == 'ALLFRIENDLY' || game.lastTurn.myAbilityResult.targetType == 'ALLENEMY'  || game.lastTurn.myAbilityResult.targetType == 'TAUNTED'">
+                        {{getBoardCardById(game.lastTurn.myUsedCard).card.name}} {{game.lastTurn.myAbility.baseAbility}} 
+                        {{game.lastTurn.myAbilityResult.amount}} {{game.lastTurn.myAbilityResult.targetType}}
+                    </p>
+                    <p *ngIf="game.lastTurn.myAbilityResult.targetType == 'ANY' || game.lastTurn.myAbilityResult.targetType == 'FRIENDLY' || game.lastTurn.myAbilityResult.targetType == 'ENEMY'">
+                        {{getBoardCardById(game.lastTurn.myUsedCard).card.name}} {{game.lastTurn.myAbility.baseAbility}} 
+                        {{game.lastTurn.myAbilityResult.amount}} {{getBoardCardById(game.lastTurn.myTarget).card.name}}
+                    </p>
+                </ng-container>
                 <p *ngIf="game.lastTurn.myAbilityResult.effect === 'NONE'">
                     {{getBoardCardById(game.lastTurn.myUsedCard).card.name}} {{game.lastTurn.myAbility.baseAbility}}
                 </p>
@@ -47,6 +51,15 @@
         </div>
 
         <div class="board_side my_board">
+
+            <ng-container *ngIf="game.turnstate === 'RECRUITING'">
+                <h2>Pick your team:</h2>
+                <mat-card class="recruitCard" *ngFor="let card of playerCollection; index as i" mat-raised-button (click)="recruitCard(card.cardId)">
+                   <h2>{{card.name}}</h2>
+                   <p *ngFor="let ability of card.abilities">{{ ability.baseAbility}}</p>
+                </mat-card>
+            </ng-container>
+
             <ng-container *ngFor="let boardCard of game.myBoard; index as i" >
                 <app-card (cardClicked)="cardClicked(boardCard.boardCardId, $event)" 
             [boardCard]="boardCard" [pickedAbility]="boardCard.boardCardId === game.myUsedCard ? game.myAbility.baseAbility : null "></app-card>

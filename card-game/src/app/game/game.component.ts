@@ -12,6 +12,7 @@ export class GameComponent implements OnInit {
   @Input() id: string = null;
   @Input() playerId: string = null;
   game: Game = null;
+  respÇache: any = null;
   playerCollection: Card[] = null;
 
   constructor(public rest: RestService) { 
@@ -19,7 +20,9 @@ export class GameComponent implements OnInit {
     interval(1500).subscribe(x => {
       if(this.id != null && this.playerId != null){
         this.rest.getGame(this.id, this.playerId).subscribe((resp: any) => {
-          if(this.game != resp){
+          if(this.game == null){
+            this.game = resp;
+          }else if(this.game.updateCounter != resp.updateCounter){
             this.game = resp;
           }
         });
