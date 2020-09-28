@@ -1,5 +1,6 @@
 {
   "name": "card-game",
+  "main": "main.js",
   "nativescript": {
     "id": "org.nativescript.cardgame"
   },
@@ -16,7 +17,8 @@
     "mobile": "tns run",
     "preview": "tns preview",
     "ngcc": "ngcc --properties es2015 module main --first-only",
-    "postinstall": "npm run ngcc"
+    "postinstall": "npm run ngcc",
+    "start:electron": "ng build --base-href ./ && electron ."
   },
   "private": true,
   "dependencies": {
@@ -51,6 +53,7 @@
     "@types/jasminewd2": "~2.0.3",
     "@types/node": "^12.11.1",
     "codelyzer": "^5.1.2",
+    "electron": "^10.1.2",
     "jasmine-core": "~3.5.0",
     "jasmine-spec-reporter": "~4.2.1",
     "karma": "^5.1.1",

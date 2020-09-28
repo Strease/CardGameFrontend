@@ -1,50 +1,39 @@
-<mat-card class="game-card" [ngClass]="{'picked': pickedAbility != null, 'target': target === true , 'dead' : boardCard.isAlive === false, 'powerUp' : boardCard.isPoweredUp === true }">
+<mat-card class="game-card" [ngClass]="{'picked': pickedAbility != null, 'target': target === true , 'dead' : boardCard.isAlive === false }">
 
     <h2 (click)="callCardClick('')" class="name">{{boardCard.card.name}}</h2>
 
-    <h2 [ngClass]="{'damaged': boardCard.currentHp < boardCard.card.maxHp }" class="hp"
-    [matTooltip]="'max: ' + boardCard.card.maxHp" matTooltipPosition="above">{{boardCard.currentHp}}</h2>
-
-    <p (click)="callCardClick(ability.abilityId)" *ngFor="let ability of boardCard.card.abilities; let i = index"
-    [ngClass]="{'pickedAbility': pickedAbility === ability.baseAbility}" (mouseenter)='showTooltip(ability.name, ability.baseAbility, ability.specialAbility)' (mouseleave)='hideTooltip()'>{{ability.name}}</p><br/>
+    <h2 class="hp" [ngClass]="{ 
+        'orange' : (boardCard.currentHp / boardCard.card.baseHp ) > 0.25 , 
+        'yellow' : (boardCard.currentHp / boardCard.card.baseHp ) > 0.50 , 
+        'green' : (boardCard.currentHp / boardCard.card.baseHp ) > 0.75 }"
+    [matTooltip]="'max: ' + boardCard.card.baseHp" matTooltipPosition="above">{{boardCard.currentHp}}</h2>
+    <mat-progress-bar
+          class="healthbar" [ngClass]="{ 
+          'orange' : (boardCard.currentHp / boardCard.card.baseHp ) > 0.25 , 
+          'yellow' : (boardCard.currentHp / boardCard.card.baseHp ) > 0.50 , 
+          'green' : (boardCard.currentHp / boardCard.card.baseHp ) > 0.75 }"
+          color="green"
+          [value]="( boardCard.currentHp / boardCard.card.baseHp ) * 100">
+      </mat-progress-bar>
+    
+      
+    <ng-container  *ngFor="let ability of boardCard.abilities; let i = index">
+        <p *ngIf="ability.baseAbility === true" class="ability" [ngClass]="{ onCooldown : ability.cooldownCounter > 0 }" 
+            (mouseenter)='showTooltip(ability)' (mouseleave)='hideTooltip()'>Base: {{ability.name}} 
+                <ng-container *ngIf="ability.cooldownCounter > 0">({{ability.cooldownCounter}})</ng-container>
+            </p>
+        <p *ngIf="ability.baseAbility != true" (click)="callCardClick(ability.abilityId)" class="ability" [ngClass]="{'pickedAbility': pickedAbility === ability.name, onCooldown : ability.cooldownCounter > 0 }" 
+        (mouseenter)='showTooltip(ability)' (mouseleave)='hideTooltip()'>{{ability.name}} 
+            <ng-container *ngIf="ability.cooldownCounter > 0">({{ability.cooldownCounter}})</ng-container>
+        </p>
+    </ng-container>
+    <ng-container *ngIf="boardCard.statuses.length > 0 "><span [matTooltip]="status.statusType + ' ' + status.amount + ' for ' + status.duration + ' turns.'" 
+        class="status" *ngFor="let status of boardCard.statuses; let i = index">{{ status.statusType }}  </span></ng-container>
 </mat-card>
 
-<div class="tooltip" *ngIf="tooltip != ''">
-    <h3>{{ abilityName }}</h3>
-    <ng-container *ngIf="tooltip =='HIT'"><p>Hits an enemy target for {{ boardCard.currentPower * 1 }} damage. 
-        Gets countered by COUNTER and MAGIC.</p>
-        <p *ngIf="specialAbility =='CLEAVE'">POWER UP: Cleaves the whole enemy team.</p>
-    </ng-container>
-
-    <ng-container *ngIf="tooltip =='HEAL'"><p>Heals a friendly target for {{ boardCard.currentPower * 1.5 }} health. 
-        Gets countered by COUNTER and HIT.</p>
-        <p *ngIf="specialAbility =='CLEAVE'">POWER UP: Heals your whole team.</p>
-    </ng-container>
-
-    <ng-container *ngIf="tooltip =='SHOOT'"><p>Shoots an enemy target for {{ boardCard.currentPower * 1 }} damage. 
-        Gets countered by BARRIER and HEAL.</p>
-        <p *ngIf="specialAbility =='CLEAVE'">POWER UP: Shoots at every enemy.</p>
-    </ng-container>
-
-    <ng-container *ngIf="tooltip =='MAGIC'"><p>Deals magic damage to an enemy target for {{ boardCard.currentPower * 1 }} damage. 
-        Gets countered by BARRIER and SHOOT.</p>
-        <p *ngIf="specialAbility =='CLEAVE'">POWER UP: Hits all enemies.</p>
-    </ng-container>
-
-    <ng-container *ngIf="tooltip =='BARRIER'"><p>Forms a barrier against SHOOT and MAGIC. 
-        Heals your party for 2 when it succeeds.</p>
-    </ng-container>
-
-    <ng-container *ngIf="tooltip =='COUNTER'"><p>Counters HIT and HEAL. 
-        Deals {{ boardCard.currentPower * 1 }} damage to an enemy target on when it succeeds.</p>
-        <p *ngIf="specialAbility =='CLEAVE'">POWER UP: Hits all enemies in retaliation.</p>
-    </ng-container>
-
-    <ng-container *ngIf="tooltip =='PREPARE'"><p>Prepares for the next turn.</p>
-    </ng-container>
-
-    <ng-container *ngIf="tooltip =='TAUNT'"><p>Taunts the enemy, forcing them to target you.</p>
-    </ng-container>
-
+<div class="tooltip" *ngIf="tooltip != null">
+    <h3>{{ tooltip.name }}</h3>
+    <p>{{ tooltip.description }}</p>
     
+    <p>Cooldown: {{ tooltip.cooldown }} turns</p>
 </div>

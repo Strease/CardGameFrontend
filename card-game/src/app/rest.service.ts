@@ -14,7 +14,7 @@ export class Game {
 export class Card{
   cardId: string = '';
   name: string = '';
-  maxHp: number = 0;
+  baseHp: number = 0;
   abilities: string[];
   playerSide: string = '';
 }
@@ -22,7 +22,10 @@ export class Card{
 export class BoardCard{
   boardCardId: string = '';
   currentHp: number = 0;
+  abilities: string[];
   card: Card = new Card();
+  statuses: Object[];
+  isAlive: boolean;
 }
 
 const endpoint = 'http://localhost:8080/';
@@ -68,6 +71,19 @@ export class RestService {
       catchError(this.handleError)
     );
   }
+
+  passTurn(gameId:string, playerId: string): Observable<any> {
+    let requestBody = {
+      "gameId": gameId, 
+      "playerId": playerId,
+      "cardId": null,
+      "abilityId": null
+    }
+    return this.http.post(endpoint + 'game/pickturn/', requestBody).pipe(
+      catchError(this.handleError)
+    );
+  }
+
 
   pickTurn(gameId:string, playerId: string, cardId: string, abilityId:string): Observable<any> {
     let requestBody = {

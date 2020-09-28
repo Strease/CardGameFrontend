@@ -57,9 +57,17 @@ export class GameComponent implements OnInit {
     });
   }
 
+  passTurn(){
+    this.rest.passTurn(this.id, this.playerId).subscribe((resp: any) => {
+      this.game = resp;
+    });
+  }
+
+
   pickTurn(boardCardId:string, abilityId:string){
     this.rest.pickTurn(this.id, this.playerId, boardCardId, abilityId).subscribe((resp: any) => {
       this.game = resp;
+      console.log(this.game);
     });
   }
 

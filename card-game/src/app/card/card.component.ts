@@ -11,9 +11,7 @@ export class CardComponent implements OnInit {
   @Input() pickedAbility: string;
   @Input() target: boolean;
   @Output() cardClicked = new EventEmitter<string>();
-  abilityName: string = '';
-  tooltip: string = '';
-  specialAbility: string = '';
+  tooltip: object = null;
 
   callCardClick(ability:string): void {
     this.cardClicked.next(ability);
@@ -24,14 +22,12 @@ export class CardComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  showTooltip(abilityName: string, baseAbility: string, specialAbility: string){
-    this.abilityName = abilityName; 
-    this.tooltip = baseAbility;
-    this.specialAbility = specialAbility;
+  showTooltip(ability: object){
+    this.tooltip = ability;
   }
 
   hideTooltip(){
-    this.tooltip = '';
+    this.tooltip = null;
   }
 
 }
