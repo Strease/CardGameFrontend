@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { RestService, Game, Card, BoardCard } from '../rest.service';
+import { RestService, Game, Champion, BoardChampion } from '../rest.service';
 import { interval } from 'rxjs';
 
 @Component({
@@ -13,7 +13,7 @@ export class GameComponent implements OnInit {
   @Input() playerId: string = null;
   game: Game = null;
   respÇache: any = null;
-  playerCollection: Card[] = null;
+  playerCollection: Champion[] = null;
 
   constructor(public rest: RestService) { 
     // Set interval for GET on game
@@ -35,24 +35,24 @@ export class GameComponent implements OnInit {
 
   ngOnInit(): void { }
 
-  cardClicked(cardId: string, ability: string){
+  cardClicked(championdId: string, ability: string){
     if(this.game.turnstate === 'PICKING'){
-      this.pickTurn(cardId, ability);
+      this.pickTurn(championdId, ability);
     }
     if(this.game.turnstate === 'TARGETING'){
-      this.targetTurn(cardId);
+      this.targetTurn(championdId);
     }
 
   }
 
   getUserCollection(){
-    this.rest.getAllCards().subscribe((resp: any) => {
+    this.rest.getAllChampions().subscribe((resp: any) => {
       this.playerCollection = resp;
     });
   }
 
-  recruitCard(cardId:string){
-    this.rest.recruitCard(this.id, this.playerId, cardId).subscribe((resp: any) => {
+  recruitChampion(championdId:string){
+    this.rest.recruitChampion(this.id, this.playerId, championdId).subscribe((resp: any) => {
       this.game = resp;
     });
   }
@@ -64,10 +64,9 @@ export class GameComponent implements OnInit {
   }
 
 
-  pickTurn(boardCardId:string, abilityId:string){
-    this.rest.pickTurn(this.id, this.playerId, boardCardId, abilityId).subscribe((resp: any) => {
+  pickTurn(boardChampiondId:string, abilityId:string){
+    this.rest.pickTurn(this.id, this.playerId, boardChampiondId, abilityId).subscribe((resp: any) => {
       this.game = resp;
-      console.log(this.game);
     });
   }
 
@@ -77,15 +76,15 @@ export class GameComponent implements OnInit {
     });
   }
 
-  getBoardCardById(boardCardId:string){
-    for(let boardCard of this.game.myBoard){
-      if(boardCard.boardCardId === boardCardId){
-        return boardCard;
+  getBoardChampionById(boardChampionId:string){
+    for(let boardChampion of this.game.myBoard){
+      if(boardChampion.boardChampionId === boardChampionId){
+        return boardChampion;
       }
     }
-    for(let boardCard of this.game.opponentsBoard){
-      if(boardCard.boardCardId === boardCardId){
-        return boardCard;
+    for(let boardChampion of this.game.opponentsBoard){
+      if(boardChampion.boardChampionId === boardChampionId){
+        return boardChampion;
       }
     }
 

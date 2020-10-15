@@ -14,17 +14,17 @@
 
     <!-- TODO: ACTIONS Component -->
     <div class="actions_container">
-        <p><span>Up next: </span><span *ngFor="let boardCard of game.baseTurnCards; index as i; let last = last">{{boardCard.card.name}}<span *ngIf="!last">, </span> </span></p>
+        <p><span>Up next: </span><span *ngFor="let boardChampion of game.readyChampions; index as i; let last = last">{{boardChampion.champion.name}}<span *ngIf="!last">, </span> </span></p>
         <p *ngFor="let log of game.gameLog">{{log}}</p>
     </div>
     
     <div class="board_container">
         <div class="board_side">
             <h2>{{game.opponentsName}}'s team</h2>
-            <ng-container *ngFor="let boardCard of game.opponentsBoard; index as i" >
-                <app-card  (cardClicked)="cardClicked(boardCard.boardCardId, $event)"
-                [boardCard]="boardCard" [pickedAbility]="boardCard.boardCardId === game.opponentsUsedCard ? game.opponentsAbility.baseAbility : null "
-                [target]="boardCard.boardCardId === game.myTarget"></app-card>
+            <ng-container *ngFor="let boardChampion of game.opponentsBoard; index as i" >
+                <app-champion (cardClicked)="cardClicked(boardChampion.boardChampionId, $event)"
+                [boardChampion]="boardChampion" 
+                [target]="boardChampion.boardChampionId === game.myTarget"></app-champion>
             </ng-container>
         </div>
 
@@ -32,14 +32,14 @@
 
             <ng-container *ngIf="game.turnstate === 'RECRUITING'">
                 <h2>Pick your team:</h2>
-                <mat-card class="recruitCard" *ngFor="let card of playerCollection; index as i" mat-raised-button (click)="recruitCard(card.cardId)">
-                   <h2>{{card.name}}</h2>
+                <mat-card class="recruitChampion" *ngFor="let champion of playerCollection; index as i" mat-raised-button (click)="recruitChampion(champion.championId)">
+                   <h2>{{champion.name}}</h2>
                 </mat-card>
             </ng-container>
 
-            <ng-container *ngFor="let boardCard of game.myBoard; index as i" >
-                <app-card (cardClicked)="cardClicked(boardCard.boardCardId, $event)" 
-            [boardCard]="boardCard" [pickedAbility]="boardCard.boardCardId === game.myUsedCard ? game.myAbility.name : null "></app-card>
+            <ng-container *ngFor="let boardChampion of game.myBoard; index as i" >
+                <app-champion (cardClicked)="cardClicked(boardChampion.boardChampionId, $event)" 
+            [boardChampion]="boardChampion" [gameId]="id" [playerId]="playerId" [pickedAbility]="boardChampion.boardChampionId === game.myUsedChampion ? game.myAbility.name : null "></app-champion>
             </ng-container>
             <h2>My team</h2>
             <button *ngIf="game.turnstate === 'PICKING'" mat-raised-button (click)="passTurn()">Pass turn</button>

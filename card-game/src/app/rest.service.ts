@@ -6,24 +6,24 @@ import { Observable, throwError } from 'rxjs';
 export class Game {
   gameId: string;
   updateCounter: number;
-  myBoard: BoardCard[];
-  opponentsBoard: BoardCard[];
+  myBoard: BoardChampion[];
+  opponentsBoard: BoardChampion[];
   turnstate: string;
 }
 
-export class Card{
-  cardId: string = '';
+export class Champion{
+  championdId: string = '';
   name: string = '';
   baseHp: number = 0;
   abilities: string[];
   playerSide: string = '';
 }
 
-export class BoardCard{
-  boardCardId: string = '';
+export class BoardChampion{
+  boardChampionId: string = '';
   currentHp: number = 0;
   abilities: string[];
-  card: Card = new Card();
+  champion: Champion = new Champion();
   statuses: Object[];
   isAlive: boolean;
 }
@@ -37,14 +37,14 @@ export class RestService {
 
   constructor(private http: HttpClient) { }
 
-  getAllCards(): Observable<any> {
-    return this.http.get<Card[]>(endpoint + 'cards/').pipe(
+  getAllChampions(): Observable<any> {
+    return this.http.get<Champion[]>(endpoint + 'champions/').pipe(
       catchError(this.handleError)
     );
   }
 
   getUserCollection(userId: string): Observable<any> {
-    return this.http.get<Card[]>(endpoint + 'user/collection/' + userId).pipe(
+    return this.http.get<Champion[]>(endpoint + 'user/collection/' + userId).pipe(
       catchError(this.handleError)
     );
   }
@@ -61,11 +61,11 @@ export class RestService {
     );
   }
 
-  recruitCard(gameId:string, playerId: string, cardId: string): Observable<any> {
+  recruitChampion(gameId:string, playerId: string, championdId: string): Observable<any> {
     let requestBody = {
       "gameId": gameId, 
       "playerId": playerId, 
-      "cardId": cardId
+      "championId": championdId
     }
     return this.http.post(endpoint + 'game/recruit/', requestBody).pipe(
       catchError(this.handleError)
@@ -76,7 +76,7 @@ export class RestService {
     let requestBody = {
       "gameId": gameId, 
       "playerId": playerId,
-      "cardId": null,
+      "championdId": null,
       "abilityId": null
     }
     return this.http.post(endpoint + 'game/pickturn/', requestBody).pipe(
@@ -85,14 +85,27 @@ export class RestService {
   }
 
 
-  pickTurn(gameId:string, playerId: string, cardId: string, abilityId:string): Observable<any> {
+  pickTurn(gameId:string, playerId: string, championdId: string, abilityId:string): Observable<any> {
     let requestBody = {
       "gameId": gameId, 
       "playerId": playerId,
-      "cardId": cardId,
+      "championId": championdId,
       "abilityId": abilityId
     }
     return this.http.post(endpoint + 'game/pickturn/', requestBody).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  levelUp(gameId:string, playerId:string, championId: string, pickId: string, removeId:string): Observable<any> {
+    let requestBody = {
+      "gameId": gameId,
+      "playerId": playerId,
+      "championId": championId,
+      "pick": pickId,
+      "remove": null
+    }
+    return this.http.post(endpoint + 'game/levelup/', requestBody).pipe(
       catchError(this.handleError)
     );
   }

@@ -1,0 +1,58 @@
+<mat-card class="champion-card" [ngClass]="{'picked': pickedAbility != null, 'target': target === true , 'dead' : boardChampion.isAlive === false }">
+
+    <h2 (click)="callCardClick('')" class="name">{{boardChampion.champion.name}}</h2>
+    <span *ngIf="boardChampion.experience != null" (click)="togglePicks()"
+    [ngClass]="{ dinged : boardChampion.dinged }" 
+    [matTooltip]="'XP: ' + boardChampion.experience" matTooltipPosition="above"
+    class="level">Lv. {{boardChampion.level}}</span>
+
+    <span *ngIf="boardChampion.experience == null" class="level">Lv. {{boardChampion.level}}</span>
+
+    <h2 class="hp" [ngClass]="{ 
+        'orange' : (boardChampion.currentHp / boardChampion.champion.baseHp ) > 0.25 , 
+        'yellow' : (boardChampion.currentHp / boardChampion.champion.baseHp ) > 0.50 , 
+        'green' : (boardChampion.currentHp / boardChampion.champion.baseHp ) > 0.75 }"
+    [matTooltip]="'max: ' + boardChampion.champion.baseHp" matTooltipPosition="above">{{boardChampion.currentHp}}</h2>
+    <mat-progress-bar
+        class="healthbar" [ngClass]="{ 
+        'orange' : (boardChampion.currentHp / boardChampion.champion.baseHp ) > 0.25 , 
+        'yellow' : (boardChampion.currentHp / boardChampion.champion.baseHp ) > 0.50 , 
+        'green' : (boardChampion.currentHp / boardChampion.champion.baseHp ) > 0.75 }"
+        color="green"
+        [value]="( boardChampion.currentHp / boardChampion.champion.baseHp ) * 100">
+    </mat-progress-bar>
+
+    <ng-container *ngIf="boardChampion.weapon != null">
+        <p class="weapon" [ngClass]="{ onCooldown : boardChampion.weapon.cooldownCounter > 0 }">{{boardChampion.weapon.name}} <ng-container *ngIf="boardChampion.weapon.cooldownCounter > 0">({{boardChampion.weapon.cooldownCounter}})</ng-container></p>
+        <br/>
+    </ng-container>
+
+    <ng-container  *ngFor="let ability of boardChampion.abilities; let i = index">
+        <p class="ability" (click)="callCardClick(ability.abilityId)" class="ability" [ngClass]="{'pickedAbility': pickedAbility === ability.name, onCooldown : ability.cooldownCounter > 0 }" 
+        (mouseenter)='showTooltip(ability)' (mouseleave)='hideTooltip()'>{{ability.name}} 
+            <ng-container *ngIf="ability.cooldownCounter > 0">({{ability.cooldownCounter}})</ng-container>
+        </p>
+        <br/>
+    </ng-container>
+    <ng-container *ngIf="boardChampion.statuses.length > 0 "><span [matTooltip]="status.statusType + ' ' + status.amount + ' for ' + status.duration + ' turns.'" 
+        class="status" *ngFor="let status of boardCard.statuses; let i = index">{{ status.statusType }}  </span></ng-container>
+</mat-card>
+
+<div class="tooltip" *ngIf="tooltip != null">
+    <h2>{{ tooltip.name }}</h2>
+    <p class="abilityType"  [ngClass]="{'support': tooltip.abilityType === 'SUPPORT', 'special': tooltip.abilityType === 'SPECIAL',
+    'attack': tooltip.abilityType === 'ATTACK', 'block': tooltip.abilityType === 'BLOCK', 'interrupt': tooltip.abilityType === 'INTERRUPT' }">
+    <span *ngIf="tooltip.baseAbility === true" >BASE -</span>
+    {{ tooltip.abilityType }}</p>
+    <p class="description">{{ tooltip.description }}</p>
+    <p class="cooldown">Cooldown: {{ tooltip.cooldown }} turns</p>
+</div>
+
+<ng-container *ngIf="picksShown">
+    <div class="showPicksBackground" (click)="togglePicks()">
+
+    </div>
+    <div class="showPicks">
+        <ng-container *ngFor="let ability of boardChampion.picks; let i = index"><p (click)="levelUp(ability.abilityId)">{{ ability.name }}</p></ng-container>
+    </div>
+</ng-container>

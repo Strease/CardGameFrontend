@@ -13,7 +13,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 import { TestboardComponent } from '@src/app/testboard/testboard.component';
-import { CardComponent } from '@src/app/card/card.component';
+import { ChampionComponent } from '@src/app/champion/champion.component';
 import { GameComponent } from '@src/app/game/game.component';
 import { ReplaceLineBreaks } from '@src/app/customPipes';
 
@@ -21,7 +21,7 @@ import { ReplaceLineBreaks } from '@src/app/customPipes';
   declarations: [
     AppComponent,
     TestboardComponent,
-    CardComponent,
+    ChampionComponent,
     GameComponent,
     ReplaceLineBreaks
   ],
