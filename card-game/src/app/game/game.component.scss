@@ -11,15 +11,16 @@
     margin: 20px;
     margin-right:60px;
     max-width: 770px;
-    color:white;
+    color:#ffffff75;
     padding-bottom: 200px;
+    float:left;
 }
 
 .board_side{
-    background-color: #252338;
+    background-color: #1d1a2d;
     border-radius: 5px;
     padding: 20px;
-    min-height: 200px;
+    min-height: 320px;
     margin-bottom: 10px;
 }
 
@@ -44,4 +45,9 @@
     margin-bottom: 5px;
     vertical-align: middle;
     cursor: pointer;
+}
+
+.pass-button{
+    float:right;
+    margin-top:25px;
 }

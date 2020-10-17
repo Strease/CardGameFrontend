@@ -15,8 +15,13 @@ export class GameComponent implements OnInit {
   respÇache: any = null;
   playerCollection: Champion[] = null;
 
+  attackChampions: string[];
+
   constructor(public rest: RestService) { 
     // Set interval for GET on game
+    if(this.playerCollection == null){
+      this.getUserCollection();
+    }
     interval(1500).subscribe(x => {
       if(this.id != null && this.playerId != null){
         this.rest.getGame(this.id, this.playerId).subscribe((resp: any) => {
@@ -27,17 +32,17 @@ export class GameComponent implements OnInit {
           }
         });
       }
-      if(this.playerCollection == null && this.playerId != null){
-        this.getUserCollection();
-      }
     });
+
   }
 
   ngOnInit(): void { }
 
   cardClicked(championdId: string, ability: string){
     if(this.game.turnstate === 'PICKING'){
-      this.pickTurn(championdId, ability);
+      if(ability != ''){
+        this.pickTurn(championdId, ability);
+      }
     }
     if(this.game.turnstate === 'TARGETING'){
       this.targetTurn(championdId);

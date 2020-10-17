@@ -15,8 +15,13 @@ export class ChampionComponent implements OnInit {
   @Input() playerId: string;
   @Input() gameId: string;
 
+  Math = Math;
+
   tooltip: object = null;
-  picksShown: boolean = false;
+  picksShown: boolean;
+
+  levelPick: string = '';
+
 
   callCardClick(ability:string): void {
     this.cardClicked.next(ability);
@@ -35,17 +40,36 @@ export class ChampionComponent implements OnInit {
     this.tooltip = null;
   }
 
-  togglePicks(){
+  togglePicksWindow(){
     if(this.picksShown == true){
       this.picksShown = false;
-    }else{
+    }else if(this.boardChampion.dinged){
       this.picksShown = true;
     }
+    this.levelPick = '';
   }
 
-  levelUp(pickId:string){
-    this.rest.levelUp(this.gameId, this.playerId, this.boardChampion.boardChampionId, pickId, null).subscribe((resp: any) => {
+  levelUpAbility(abilityId:string){
+    this.rest.levelUpAbility(this.gameId, this.playerId, this.boardChampion.boardChampionId, abilityId, null).subscribe((resp: any) => {
     });
+  }
+
+  levelUpWeapon(weaponId:string){
+    this.rest.levelUpWeapon(this.gameId, this.playerId, this.boardChampion.boardChampionId, weaponId).subscribe((resp: any) => {
+    });
+  }
+
+  levelUpAbilityFull(abilityId:string){
+    this.levelPick = abilityId;
+  }
+
+  levelUpAbilityRemove(abilityId:string){
+    this.rest.levelUpAbility(this.gameId, this.playerId, this.boardChampion.boardChampionId, this.levelPick, abilityId).subscribe((resp: any) => {
+    });
+  }
+
+  undoPick(){
+    this.levelPick = '';
   }
 
 }
