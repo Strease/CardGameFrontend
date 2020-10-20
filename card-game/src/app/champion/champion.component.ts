@@ -72,4 +72,8 @@ export class ChampionComponent implements OnInit {
     this.levelPick = '';
   }
 
+  arrayOne(n: number): any[] {
+    return Array(n);
+  }
+
 }

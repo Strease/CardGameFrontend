@@ -11,6 +11,8 @@ import { MatCardModule } from '@angular/material/card';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatIconModule } from '@angular/material/icon';
+
 
 import { TestboardComponent } from '@src/app/testboard/testboard.component';
 import { ChampionComponent } from '@src/app/champion/champion.component';
@@ -34,7 +36,8 @@ import { ReplaceLineBreaks } from '@src/app/customPipes';
     MatCardModule,
     MatExpansionModule,
     MatTooltipModule,
-    MatProgressBarModule
+    MatProgressBarModule,
+    MatIconModule
   ],
   providers: [],
   bootstrap: [AppComponent]

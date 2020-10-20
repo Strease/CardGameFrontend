@@ -17,8 +17,8 @@
             </ng-container>     
             
             <ng-container *ngIf="game.turnstate === 'TARGETING'">
-                <h2 *ngIf="game.myAbilityResult != null && game.myTarget === null">Pick a {{ game.myAbilityResult.targetType}} target</h2>
-                <h2 *ngIf="game.myAbilityResult === null">Waiting..</h2>
+                <h2 *ngIf="game.myAbilityResult != null && game.myAbilityResult != 'AUTO' && game.myAbilityResult != 'NONE' && game.myTarget === null">Pick a {{ game.myAbilityResult }} target</h2>
+                <h2 *ngIf="game.myAbilityResult === null || game.myAbilityResult === 'AUTO' || game.myAbilityResult === 'NONE'">Waiting for opponent..</h2>
             </ng-container>
         </div>
 
@@ -35,14 +35,16 @@
                 <app-champion (cardClicked)="cardClicked(boardChampion.boardChampionId, $event)" 
             [boardChampion]="boardChampion" [gameId]="id" [playerId]="playerId" [pickedAbility]="boardChampion.boardChampionId === game.myUsedChampion ? game.myAbility.ability.name : null "></app-champion>
             </ng-container>
+            <br/>
             <button class="pass-button" *ngIf="game.turnstate === 'PICKING'" mat-raised-button (click)="passTurn()">Pass turn</button>
-            <br/><br/>
             <h2>Team {{ game.myPlayerSide }} (My team)</h2>
         </div>     
     </div>
 
     <div class="actions_container">
+        <h2>What happened?</h2>
         <p *ngFor="let log of game.gameLog">{{log}}</p>
     </div>
 
 </div>
+<br/>

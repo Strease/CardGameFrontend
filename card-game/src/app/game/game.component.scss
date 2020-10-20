@@ -1,39 +1,40 @@
-.expander{
-    max-width: 800px;
-}
-
 .actions_container, .board_container, .game_container{
     display: inline-block;
-    vertical-align: middle;
 }
 
 .game_container{
     margin: 20px;
-    margin-right:60px;
-    max-width: 770px;
-    color:#ffffff75;
-    padding-bottom: 200px;
-    float:left;
+    width: 1300px;
+    color:#00000075;
+    left: 50%;
+    margin-left: -550px;
+    position: relative;
+    margin-bottom: 80px;
+}
+
+.board_container{
+    background: #e4b85f;
+    padding: 15px;
+    border-radius: 10px;
 }
 
 .board_side{
-    background-color: #1d1a2d;
+    background-color: #efcd87;
     border-radius: 5px;
-    padding: 20px;
+    padding: 10px 30px;
     min-height: 320px;
     margin-bottom: 10px;
 }
 
 .actions_container{
-    margin-top: 20px;
-    margin-bottom: 20px;
-    text-align: center;
-    background-color: #252338;
+    background-color: #22212d;
+    color: #ffffff60;
+    padding: 15px;
+    float: right;
+    width: 350px;
     border-radius: 5px;
-    color: white;
-    width: 100%;
     p{
-        margin: 15px;
+        margin-bottom: 8px;
     }
 }
 
@@ -49,5 +50,20 @@
 
 .pass-button{
     float:right;
-    margin-top:25px;
+    margin-right: 15px;
+}
+
+h2{
+    margin-left: 15px;
+    margin-bottom: 5px;
+    line-height: 1.8;
+}
+
+button{
+    background-color: #302f3a;
+    color: #ffffff80;
+}
+
+button:active{
+    color: #ffffff;
 }
