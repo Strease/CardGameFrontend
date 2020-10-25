@@ -23,11 +23,16 @@ export class GameComponent implements OnInit {
       this.getUserCollection();
     }
     interval(1500).subscribe(x => {
+      if(this.game != null){
+        var updateCounter = this.game.updateCounter
+      }else{
+        var updateCounter = 0;
+      }
       if(this.id != null && this.playerId != null){
-        this.rest.getGame(this.id, this.playerId).subscribe((resp: any) => {
+        this.rest.getGame(this.id, this.playerId, updateCounter ).subscribe((resp: any) => {
           if(this.game == null){
             this.game = resp;
-          }else if(this.game.updateCounter != resp.updateCounter){
+          }else if(resp.updated == true && this.game.updateCounter != resp.updateCounter){
             this.game = resp;
           }
         });

@@ -1,4 +1,3 @@
-
 <div *ngIf="game != null" class="game_container">  
     <div class="board_container">
         <div class="board_side">
@@ -42,8 +41,36 @@
     </div>
 
     <div class="actions_container">
-        <h2>What happened?</h2>
-        <p *ngFor="let log of game.gameLog">{{log}}</p>
+        <h2>Up next -----</h2>
+        <ng-container *ngFor="let boardChampion of game.myBoard; index as i">
+            <ng-container *ngFor="let ability of boardChampion.abilities; index as i">
+                <img  class="ability-icon"  *ngIf="ability.castTime > 0" src="assets/img/icons/abilities/{{ability.ability.name}}.png">
+            </ng-container>
+        </ng-container>
+        <ng-container *ngFor="let boardChampion of game.opponentsBoard; index as i">
+            <ng-container *ngFor="let ability of boardChampion.abilities; index as i">
+                <img  class="ability-icon"  *ngIf="ability.castTime > 0" src="assets/img/icons/abilities/{{ability.ability.name}}.png">
+            </ng-container>
+        </ng-container>
+
+        <h2>This turn -----</h2>
+        <ng-container *ngFor="let boardChampion of game.myBoard; index as i">
+            <ng-container *ngFor="let ability of boardChampion.abilities; index as i">
+                <img  class="ability-icon"  *ngIf="ability.castTime == 0" src="assets/img/icons/abilities/{{ability.ability.name}}.png">
+            </ng-container>
+        </ng-container>
+        <ng-container *ngFor="let boardChampion of game.opponentsBoard; index as i">
+            <ng-container *ngFor="let ability of boardChampion.abilities; index as i">
+                <img  class="ability-icon" *ngIf="ability.castTime == 0" src="assets/img/icons/abilities/{{ability.ability.name}}.png">
+            </ng-container>
+        </ng-container>
+
+        <h2>History</h2>
+        <div [matTooltip]="log.text" *ngFor="let log of game.gameLogs">
+            <img class="champion-icon" src="assets/img/icons/champions/{{log.caster}}.png" [ngClass]="{playerA : log.casterPlayerSide == 'A', playerB : log.casterPlayerSide == 'B' }">
+            <img class="ability-icon" src="assets/img/icons/abilities/{{log.move}}.png">
+            <img class="champion-icon" src="assets/img/icons/champions/{{log.target}}.png" [ngClass]="{playerA : log.targetPlayerSide == 'A', playerB : log.targetPlayerSide == 'B' }">
+        </div>
     </div>
 
 </div>

@@ -1,7 +1,7 @@
 .champion-card{
-    width: 200px;
+    width: 280px;
     min-height: 100px;
-    margin: 15px;
+    margin: 10px;
     display: inline-block;
     vertical-align: text-top;
     background: #22212d;
@@ -19,6 +19,7 @@
 .info{
     font-size: 10px;
     line-height: 0.5;
+    color: #dedede;
 }
 
 .info-status{
@@ -75,6 +76,7 @@ span.ability{
     height: 100%;
     float: right;
     margin-left: -10px;
+    max-width: 200px;
 }
 
 .healthbar-damage{
@@ -83,6 +85,7 @@ span.ability{
     border-radius: 0px 3px 3px 0px;
     float: left;
     margin-right: -200px;
+    max-width: 200px;
 }
 
 .healthnumber, .energynumber{
@@ -110,10 +113,10 @@ span.ability{
 
 .tooltip{
     position: fixed;
-    background-color: #16151d;
+    background-color: #191821;
     color:white;
-    width: 600px;
-    height: 200px;
+    width: 500px;
+    min-height: 100px;
     padding: 15px;
     border-radius: 4px;
     bottom: 50px;
@@ -125,19 +128,19 @@ span.ability{
         line-height: 0.7;
     }
     .support{
-        color: #39b939;
+        color: #47f1a2;
     }
-    .special{
-        color: #30b6a4;
+    .offense{
+        color: #f13c4b;
     }
-    .attack{
-        color: rgb(238, 71, 71);
+    .defense{
+        color: #2983f8;
     }
-    .block{
-        color: rgb(44, 144, 226);
+    .disrupt{
+        color: #f59943;
     }
-    .cancel{
-        color: rgb(202, 63, 133);
+    .control{
+        color: #e44ef8;
     }
 
     .description{
@@ -145,9 +148,10 @@ span.ability{
         margin-bottom: 30px
     }
 
-    .cooldown{
+    .tooltip-info{
         color: rgba(255, 255, 255, 0.822);
         font-size: 12px;
+        margin-bottom: 0px;
     }
 }
 
@@ -165,7 +169,7 @@ span.ability{
 .power{
     color: #b6429d;
 }
-.speed{
+.speed, .energy{
     color: #e6b425;
 }
 .armor{
@@ -198,47 +202,81 @@ span.ability{
 }
 
 .ability{
-    padding: 3px 8px;
-    background-color: #4f4c5d;
-    color: white;
-    border-radius: 2px;
-    margin-bottom: 7px;
     display: inline-block;
+    border-radius: 4px;
     margin-right: 7px;
-    box-shadow: 0px 2px 5px #191821;
+    margin-bottom: 7px;
+    width: 60px;
+    height: 60px;
+    border: 3px solid black;
+    background-color: #353344;
+    position: relative;
+}
+
+.ability-overlay{
+    width: 60px;
+    height: 60px;
+    float: left;
+    position: absolute;
 }
 
 .ability-icon{
-    width: 50px;
-    height: 50px;
-    border-radius: 4px;
-    margin-right: 7px;
+    width: 60px;
+    height: 60px;
     display: inline-block;
+    vertical-align: middle;
+    position: absolute;
+    left: 0px;
+}
+
+.icon-cooldown{
+    opacity: 0.25;
+}
+
+.status-icon{
+    width: 30px;
+    height: 30px;
+    border-radius: 2px;
+    margin-right: 4px;
+    display: inline-block;
+    vertical-align: middle;
 }
 
 .tooltip-icon{
-    float:left;
-    width: 100px;
-    height: 100px;
-    border-radius: 8px;
-    margin-right: 20px;
+    float: right;
+    width: 80px;
+    height: 80px;
+    border-radius: 6px;
+    margin-left: 20px;
+    border: 4px solid black;
+    background-color: black;
 }
 
 .pickable{
     cursor: pointer;
+    border-color: #b7ad90;
 }
 
-.pickedAbilitym, .attacking{
-    background-color: #ffbc00;
-    color: black;
+.attacking{
+    box-shadow:0px 0px 0px 3px #ffbc00 inset;
+}
+
+.pickedAbility, .readyAbility {
+    border-color: #ffbc00;
 }
 
 .onCooldown{
-    color: #ffffff60;
     cursor: not-allowed;
-    text-decoration: none;
-    background-color: #1c1b25;
-    box-shadow: none;
+}
+
+.cooldownCounter{
+    color: white;
+    text-align: center;
+    font-size: 24px;
+    margin-top: 20px;
+    position: absolute;
+    z-index: 10;
+    width: 60px;
 }
 
 .status{
@@ -292,12 +330,15 @@ span.ability{
 }
 
 .castbar{
-    padding: 3px 8px;
+    padding: 5px;
     background-color: #d39c05;
-    border-radius: 2px;
-    margin-bottom: 7px;
-    display: inline-block;
-    margin-right: 7px;
+    float: left;
+    position: relative;
+    margin: 45px 0px 5px 5px;
+    bottom: 0px;
+    box-shadow: 0px 0px 5px black;
+    z-index: 10;
+    margin-right: -10p;
 }
 
 @keyframes gradient {

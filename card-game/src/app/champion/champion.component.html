@@ -1,4 +1,5 @@
-<mat-card (click)="callCardClick('')" class="champion-card" [ngClass]="{'picked': pickedAbility != null, 'target': target === true , 'dead' : boardChampion.isAlive === false, casting : boardChampion.castTime > -1}">
+<mat-card (click)="callCardClick('')" class="champion-card" [ngClass]="{'picked': pickedAbility != null, 
+'target': target === true , 'dead' : boardChampion.isAlive === false, casting : boardChampion.castTime > -1}">
 
     
     <span *ngIf="boardChampion.experience != null" (click)="togglePicksWindow()"
@@ -16,7 +17,8 @@
             'yellow' : (boardChampion.currentHp / boardChampion.maxHp ) > 0.50 , 
             'green' : (boardChampion.currentHp / boardChampion.maxHp ) > 0.75 }"
             [ngStyle]="{'width': ( boardChampion.currentHp / boardChampion.maxHp ) * 100 + '%' }">
-            <div *ngIf="boardChampion.hpChange > 0" [matTooltip]="'Healed: ' + boardChampion.hpChange" matTooltipPosition="above" class="healthbar-healing" 
+            <div *ngIf="boardChampion.hpChange > 0" [matTooltip]="'Healed: ' + boardChampion.hpChange" 
+                matTooltipPosition="above" class="healthbar-healing" 
                 [ngStyle]="{'width': ( Math.abs(boardChampion.hpChange) / boardChampion.maxHp ) * 100 + '%' }"></div>
         </div>
         <div  [matTooltip]="'Damaged: ' + boardChampion.hpChange" matTooltipPosition="above" class="healthbar-damage"
@@ -47,26 +49,42 @@
     <p class="info">Weapon</p>
     <ng-container *ngIf="boardChampion.boardWeapon != null">
         <p class="weapon" (mouseenter)='showTooltip(boardChampion.boardWeapon.weapon)' (mouseleave)='hideTooltip()'
-        [ngClass]="{ onCooldown : boardChampion.boardWeapon.cooldownCounter > 0, attacking : boardChampion.isAttacking }">{{boardChampion.boardWeapon.weapon.name}} <ng-container *ngIf="boardChampion.boardWeapon.cooldownCounter > 0">({{boardChampion.boardWeapon.cooldownCounter}})</ng-container></p>
+        [ngClass]="{ onCooldown : boardChampion.boardWeapon.cooldownCounter > 0, attacking : boardChampion.isAttacking }">
+        {{boardChampion.boardWeapon.weapon.name}} <ng-container *ngIf="boardChampion.boardWeapon.cooldownCounter > 0">
+            ({{boardChampion.boardWeapon.cooldownCounter}})</ng-container></p>
         <br/>
     </ng-container>
 
-    <p class="info" *ngIf="boardChampion.abilities != null">Abilities</p>
-    <ng-container *ngIf="boardChampion.castTime > -1 "><span class="castbar"></span><span class="castbar" *ngFor="let item of arrayOne(boardChampion.castTime); let i = index;"></span><br/></ng-container>
+    <p class="info" *ngIf="boardChampion.abilities.length > 0">Abilities</p>
+
     <div class="abilities">
-        <ng-container  *ngFor="let ability of boardChampion.abilities; let i = index">
-            <!-- <p (click)="callCardClick(ability.boardAbilityId)" class="ability pickable" [ngClass]="{'pickedAbility': pickedAbility === ability.ability.name, onCooldown : ability.cooldownCounter > 0 }" 
-            (mouseenter)='showTooltip(ability.ability)' (mouseleave)='hideTooltip()'>{{ability.ability.name}} 
-                <ng-container *ngIf="ability.cooldownCounter > 0">({{ability.cooldownCounter}})</ng-container>
-            </p> -->
-            <img (click)="callCardClick(ability.boardAbilityId)" class="ability-icon pickable" [ngClass]="{'pickedAbility': pickedAbility === ability.ability.name, onCooldown : ability.cooldownCounter > 0 }" 
-            (mouseenter)='showTooltip(ability.ability)' (mouseleave)='hideTooltip()' src="assets/img/icons/abilities/{{ability.ability.name}}.png">
-        </ng-container>
+        <div class="ability" [ngClass]="{'pickedAbility': pickedAbility === ability.ability.name, 'readyAbility' : ability.castTime == 0,
+            'pickable' : ability.castTime == -1 && ability.cooldownCounter == 0 }" 
+        *ngFor="let ability of boardChampion.abilities; let i = index"  (click)="callCardClick(ability.boardAbilityId)"
+        (mouseenter)='showTooltip(ability.ability)' (mouseleave)='hideTooltip()'>
+
+            <p class="cooldownCounter" *ngIf="ability.cooldownCounter > 0">{{ability.cooldownCounter}}</p>
+
+            <ng-container *ngIf="ability.castTime > -1"><span class="castbar" 
+                *ngFor="let item of arrayOne(ability.castTime); let i = index;"></span>
+            </ng-container>
+
+            <div class="ability-overlay" [ngStyle]="{background: 'conic-gradient(rgba(0,0,0,0) ' 
+            + (100 - ((ability.cooldownCounter/ability.ability.cooldown)*100)) +
+             '%, rgba(0,0,0,0.8) ' + (100 - ((ability.cooldownCounter/ability.ability.cooldown)*100)) 
+             + '%)'}" [ngClass]="{onCooldown : ability.cooldownCounter > 0 }">
+            </div>
+            <img  class="ability-icon" [ngClass]="{ 'icon-cooldown' : ability.cooldownCounter > 0 }"  
+            src="assets/img/icons/abilities/{{ability.ability.name}}.png">
+        </div>
     </div>
 
     <p class="info info-status" *ngIf="boardChampion.statuses.length > 0 ">Status effects</p>
-    <ng-container *ngIf="boardChampion.statuses.length > 0 "><span [matTooltip]="status.statusType + ' ' + status.amount + ' for ' + status.duration + ' turns.'" 
-        class="status" *ngFor="let status of boardChampion.statuses; let i = index">{{ status.statusType }}  </span></ng-container>
+    <ng-container *ngIf="boardChampion.statuses.length > 0 "><span 
+        [matTooltip]="status.statusType + ' ' + status.amount + ' for ' + status.duration + ' turns.'" 
+        class="status" *ngFor="let status of boardChampion.statuses; let i = index">
+        <img  class="status-icon" src="assets/img/icons/statuses/{{status.statusType}}.png">
+     </span></ng-container>
    
 </mat-card>
 
@@ -74,12 +92,14 @@
     <img class="tooltip-icon" src="assets/img/icons/abilities/{{tooltip.name}}.png">
     <div class="tooltip-content">
         <h2>{{ tooltip.name }}</h2>
-        <p class="abilityType"  [ngClass]="{'support': tooltip.abilityType === 'SUPPORT', 'special': tooltip.abilityType === 'SPECIAL',
-        'attack': tooltip.abilityType === 'ATTACK', 'block': tooltip.abilityType === 'BLOCK', 'cancel': tooltip.abilityType === 'CANCEL' }">
+        <p class="abilityType"  [ngClass]="{'support': tooltip.abilityType === 'SUPPORT', 'offense': tooltip.abilityType === 'OFFENSE', 
+        'defense': tooltip.abilityType === 'DEFENSE', 'disrupt': tooltip.abilityType === 'DISRUPT', 'control': tooltip.abilityType === 'CONTROL'}">
         {{ tooltip.abilityType }}</p>
         <p class="description">{{ tooltip.description }}</p>
-        <p class="cooldown">{{ tooltip.cost }} Energy</p>
-        <p class="cooldown">{{ tooltip.cooldown }} Turns cooldown</p>
+        <p class="tooltip-info">Cost: <span class="energy">{{ tooltip.cost }} Energy</span></p>
+        <p class="tooltip-info">{{ tooltip.cooldown }} Turns cool down</p>
+        <p *ngIf="tooltip.castTime == 0" class="tooltip-info">Instant</p>
+        <p *ngIf="tooltip.castTime != 0" class="tooltip-info">{{ tooltip.castTime }} Turns cast time</p>
     </div>
 </div>
 
@@ -117,12 +137,18 @@
         <ng-container *ngIf="boardChampion.full && levelPick != ''">
             <p>You are full on abilities, replace one of your current abilities:</p>
             <div class="pickIndicator active">
-                <ng-container *ngFor="let ability of boardChampion.abilities; let i = index">
-                    <p class="ability" (click)="levelUpAbilityRemove(ability.boardAbilityId)" class="ability" [ngClass]="{ onCooldown : ability.cooldownCounter > 0 }" 
-                    (mouseenter)='showTooltip(ability.ability)' (mouseleave)='hideTooltip()'>{{ability.ability.name}} 
-                        <ng-container *ngIf="ability.cooldownCounter > 0">({{ability.cooldownCounter}})</ng-container>
-                    </p>
-                </ng-container>
+                    
+
+                <div class="ability pickable" *ngFor="let ability of boardChampion.abilities; let i = index" 
+                (click)="levelUpAbilityRemove(ability.boardAbilityId)" 
+                    (mouseenter)='showTooltip(ability.ability)' (mouseleave)='hideTooltip()'>
+                    <p class="cooldownCounter" *ngIf="ability.cooldownCounter > 0">{{ability.cooldownCounter}}</p>
+                    <div class="ability-overlay" [ngStyle]="{background: 'conic-gradient(rgba(0,0,0,0) ' + (100 - ((ability.cooldownCounter/ability.ability.cooldown)*100)) +
+                    '%, rgba(0,0,0,0.8) ' + (100 - ((ability.cooldownCounter/ability.ability.cooldown)*100)) + '%)'}" [ngClass]="{onCooldown : ability.cooldownCounter > 0 }">
+                    </div>
+                    <img  class="ability-icon" [ngClass]="{ 'icon-cooldown' : ability.cooldownCounter > 0 }"  src="assets/img/icons/abilities/{{ability.ability.name}}.png">
+                </div>
+                
             </div>
         </ng-container>
     </div>

@@ -4,10 +4,10 @@
 
 .game_container{
     margin: 20px;
-    width: 1300px;
+    width: 1500px;
     color:#00000075;
     left: 50%;
-    margin-left: -550px;
+    margin-left: -750px;
     position: relative;
     margin-bottom: 80px;
 }
@@ -66,4 +66,30 @@ button{
 
 button:active{
     color: #ffffff;
+}
+
+.ability-icon{
+    width: 30px;
+    height: 30px;
+    display: inline-block;
+    vertical-align: middle;
+    position: relative;
+    margin: 4px;
+}
+
+.champion-icon{
+    width: 30px;
+    height: 30px;
+    display: inline-block;
+    vertical-align: middle;
+    position: relative;
+    margin: 4px;
+}
+
+.playerA{
+    border: 2px solid #2955e4;
+}
+
+.playerB{
+    border: 2px solid #ce425a;
 }

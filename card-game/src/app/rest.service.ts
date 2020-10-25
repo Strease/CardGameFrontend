@@ -51,8 +51,8 @@ export class RestService {
     );
   }
 
-  getGame(gameId: string, playerId: string): Observable<any> {
-    return this.http.get<Game>(endpoint + 'game/' + gameId + '/' + playerId).pipe(
+  getGame(gameId: string, playerId: string, updateCounter: number): Observable<any> {
+    return this.http.get<Game>(endpoint + 'game/' + gameId + '/' + playerId + '/' + updateCounter).pipe(
       catchError(this.handleError)
     );
   }
