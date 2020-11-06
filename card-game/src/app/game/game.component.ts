@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { RestService, Game, Champion, BoardChampion } from '../rest.service';
+import { RestService, Game, Champion, BoardChampion, BoardAbility } from '../rest.service';
 import { interval } from 'rxjs';
 
 @Component({
@@ -14,8 +14,11 @@ export class GameComponent implements OnInit {
   game: Game = null;
   respÇache: any = null;
   playerCollection: Champion[] = null;
-
   attackChampions: string[];
+  pickedAbility: BoardAbility = null;
+  pickedChampion: string = '';
+  targetType: string = '';
+  pickedTarget: string = '';
 
   constructor(public rest: RestService) { 
     // Set interval for GET on game
@@ -43,14 +46,24 @@ export class GameComponent implements OnInit {
 
   ngOnInit(): void { }
 
-  cardClicked(championdId: string, ability: string){
+  cardClicked(championdId: string, boardAbility: BoardAbility){
     if(this.game.turnstate === 'PICKING'){
-      if(ability != ''){
-        this.pickTurn(championdId, ability);
+      if(this.pickedAbility == null){
+        this.pickedAbility = boardAbility;
+        this.pickedChampion = championdId;
+        this.targetType = boardAbility.ability.targetType;
+        if(this.targetType == "AUTO"){
+          this.pickTurn(this.pickedChampion, championdId, this.pickedAbility.boardAbilityId);
+          this.pickedAbility = null;
+          this.targetType = null;
+          this.pickedChampion = '';
+        }
+      }else{
+        this.pickTurn(this.pickedChampion, championdId, this.pickedAbility.boardAbilityId);
+        this.pickedAbility = null;
+        this.targetType = null;
+        this.pickedChampion = '';
       }
-    }
-    if(this.game.turnstate === 'TARGETING'){
-      this.targetTurn(championdId);
     }
 
   }
@@ -67,21 +80,14 @@ export class GameComponent implements OnInit {
     });
   }
 
-  passTurn(){
-    this.rest.passTurn(this.id, this.playerId).subscribe((resp: any) => {
+  endTurn(){
+    this.rest.endTurn(this.id, this.playerId).subscribe((resp: any) => {
       this.game = resp;
     });
   }
 
-
-  pickTurn(boardChampiondId:string, abilityId:string){
-    this.rest.pickTurn(this.id, this.playerId, boardChampiondId, abilityId).subscribe((resp: any) => {
-      this.game = resp;
-    });
-  }
-
-  targetTurn(targetId:string){
-    this.rest.targetTurn(this.id, this.playerId, targetId).subscribe((resp: any) => {
+  pickTurn(boardChampiondId:string, targetId:string, abilityId:string){
+    this.rest.pickTurn(this.id, this.playerId, boardChampiondId, targetId, abilityId ).subscribe((resp: any) => {
       this.game = resp;
     });
   }

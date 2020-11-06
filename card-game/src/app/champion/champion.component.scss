@@ -1,19 +1,101 @@
+.champion{
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    position: absolute;
+    width: 400px;
+    height: 250px;
+}
+
+.position-0{
+    left: 20vw;
+    top: 25vh;
+}
+
+.position-1{
+    left: 45vw;
+    top: 20vh;
+}
+
+.position-2{
+    left: 70vw;
+    top: 25vh;
+}
+
+.position-3{
+    left: 20vw;
+    top: 67vh;
+}
+
+.position-4{
+    left: 45vw;
+    top: 72vh;
+}
+
+.position-5{
+    left: 70vw;
+    top: 67vh;
+}
+
 .champion-card{
-    width: 280px;
-    min-height: 100px;
-    margin: 10px;
+    width: 400px;
+    height: 200px;
     display: inline-block;
     vertical-align: text-top;
     background: #22212d;
     color: white;
+    padding: 0px;
+    border-radius: 0px;
+    box-shadow: 0px 4px 12px #00000090;
+}
+
+.abilities{
+    height: 66px;
+    padding: 15px;
+    padding-right: 10px;
+    display: inline-block;
+    vertical-align: text-top;
+    background: #1a1923;
+    color: white;
+    margin: 15px 15px -3px;
+    box-shadow: 0px 2px 7px #00000050;
+}
+
+.champion-avatar, .champion-content, .weapon-container, .stats-container{
+    float:left;
+}
+
+.champion-flag{
+    margin:0px 15px;
+    width: 20px;
+    height: 30px;
+    box-shadow: 0px 2px 5px #191821;
+}
+
+.flag-A{
+    background-color: #2955e4;
+}
+
+.flag-B{
+    background-color: #ce425a;
+}
+
+.weapon-container{
+    margin-right: 15px;
+}
+
+.champion-avatar{
+    height: 100%;
+    width: 120px;
+    background-size: cover;
+}
+
+.champion-content{
+    padding: 12px;
+    width: 255px;
 }
 
 .name{
     margin-bottom: 10px;
-    display: inline-block;
-    vertical-align: middle;
-    line-height: 1;
-    height: 30px;
 }
 
 .info{
@@ -48,15 +130,19 @@ span.ability{
 
 .healthbar-container, .energybar-container{
     background-color: #353344;
+    clear: both;
+    width: 235px;
     height: 25px;
     border-radius: 3px;
-    margin-bottom: 5px;
+    margin-bottom: 6px;
     box-shadow: 0px 2px 5px #191821;
+    display:inline-block;
+    vertical-align: middle;
 }
 
 .energybar-container{
     height: 10px;
-    margin-bottom: 15px;
+    margin-bottom: 20px;
 }
 
 .healthbar, .energybar{
@@ -65,6 +151,21 @@ span.ability{
     border-radius: 3px 0px 0px 3px;
     border-right: 2px solid #ffffff96;
 }
+
+.energy-icon, .health-icon{
+    display: inline-block;
+    margin-right: 10px;
+    vertical-align: middle;
+}
+
+.health-icon{
+    margin-bottom: 4px;
+}
+
+.energy-icon{
+    margin-bottom: 20px;
+}
+
 
 .energybar{
     background: linear-gradient(#e6b425, #f1a600);
@@ -89,15 +190,11 @@ span.ability{
 }
 
 .healthnumber, .energynumber{
-    left: 50%;
+    left: 270px;
     position: absolute;
     margin-left: -10px;
     font-size: 12px;
     line-height: 2;
-}
-
-.target{
-    box-shadow:0px 0px 0px 3px #bb1c1c inset;
 }
 
 .dead{
@@ -115,32 +212,30 @@ span.ability{
     position: fixed;
     background-color: #191821;
     color:white;
-    width: 500px;
+    width: 350px;
     min-height: 100px;
     padding: 15px;
     border-radius: 4px;
-    bottom: 50px;
-    right: 50px;
+    bottom: 25px;
+    right: 25px;
     z-index: 1000;
-    box-shadow: 5px 0px 10px black;
+    box-shadow: 0px 3px 10px black;
     .abilityType{
         font-size: 11px;
         line-height: 0.7;
     }
-    .support{
-        color: #47f1a2;
+    
+    .type-OFFENSE{
+        color: #e95561;
     }
-    .offense{
-        color: #f13c4b;
+    .type-CONTROL{
+        color: #f59343;
     }
-    .defense{
-        color: #2983f8;
+    .type-SUPPORT{
+        color: #5cdba0;
     }
-    .disrupt{
-        color: #f59943;
-    }
-    .control{
-        color: #e44ef8;
+    .type-DEFENSE{
+        color: #4e92f8;
     }
 
     .description{
@@ -155,15 +250,20 @@ span.ability{
     }
 }
 
+.stats-container{
+    margin-right: 15px;
+}
+
 .stats{
-    padding: 3px 9px;
+    padding: 8px;
     background-color: #191727;
     color: #ffffff85;
-    border-radius: 2px;
-    margin-bottom: 15px;
+    border-radius: 3px;
     margin-right: 6px;
     display: inline-block;
     vertical-align: middle;
+    width: 12px;
+    text-align: center;
 }
 
 .power{
@@ -176,41 +276,31 @@ span.ability{
     color: #4c83ff;
 }
 .presence{
-    color: #7a62ff;
-}
-
-.level{
-    background-color: #353344;
-    margin-bottom: 0px;
-    margin-right: 0px;
-    float: right;
-}
-
-.level.dinged{
-    background-color: #ffbc00;
-    color: black;
-    box-shadow: 0px 2px 5px #191821;
-    cursor: pointer;
-}
-
-.weapon{
-    padding: 3px 8px;
-    background-color: #353344;
-    border-radius: 2px;
-    display: inline-block;
-    color: #ffffff85;
+    color: #38b7d4;
 }
 
 .ability{
     display: inline-block;
     border-radius: 4px;
-    margin-right: 7px;
-    margin-bottom: 7px;
+    margin-right: 5px;
     width: 60px;
     height: 60px;
     border: 3px solid black;
-    background-color: #353344;
+    background-color: black;
     position: relative;
+}
+
+.ability.type-OFFENSE.pickable:hover{
+    border-color: #e95561;
+}
+.ability.type-CONTROL.pickable:hover{
+    border-color: #f59343;
+}
+.ability.type-SUPPORT.pickable:hover{
+    border-color: #5cdba0;
+}
+.ability.type-DEFENSE.pickable:hover{
+    border-color: #4e92f8;
 }
 
 .ability-overlay{
@@ -236,16 +326,16 @@ span.ability{
 .status-icon{
     width: 30px;
     height: 30px;
-    border-radius: 2px;
-    margin-right: 4px;
+    margin: 0px 8px 8px 0px;
+    margin-left: 0px;
     display: inline-block;
     vertical-align: middle;
 }
 
 .tooltip-icon{
     float: right;
-    width: 80px;
-    height: 80px;
+    width: 100px;
+    height: 100px;
     border-radius: 6px;
     margin-left: 20px;
     border: 4px solid black;
@@ -254,7 +344,7 @@ span.ability{
 
 .pickable{
     cursor: pointer;
-    border-color: #b7ad90;
+    border-color: #676488;
 }
 
 .attacking{
@@ -263,6 +353,10 @@ span.ability{
 
 .pickedAbility, .readyAbility {
     border-color: #ffbc00;
+}
+
+.castingAbility{
+    border-color: #8a7641;
 }
 
 .onCooldown{
@@ -279,66 +373,27 @@ span.ability{
     width: 60px;
 }
 
-.status{
-    font-size: 10px;
-}
-
-.showPicksBackground{
-    position: fixed;
-    top:0px;
-    left:0px;
-    width: 100%;
-    height: 100%;
-    background-color: #12101df6;
-    z-index: 99;
-}
-
-.showPicks{
-    position: fixed;
-    top: 50%;
-    margin-top:-200px;
-    width: 800px;
-    left: 50%;
-    margin-left: -400px;
-    background-color: #12101df6;
-    border: 4px solid black;
-    color: white;
-    padding: 15px;
-    z-index: 100;
-
-    .pickIndicator{
-        background-color: #12101d;
-        padding: 10px;
-        padding-bottom: 3px;
-        display: inline-block;
-        border-radius: 2px;
-    }
-
-    .active{
-        box-shadow:0px 0px 0px 2px #ffbc00 inset;
-        .ability{
-            cursor: pointer;
-        }
-    }
-}
-
 .picked, .casting{
     background: linear-gradient(-45deg,  #22212d, #2a293a, #d39c05);
-    box-shadow:0px 0px 0px 4px #ffbc00 inset;
+	background-size: 400% 400%;
+	animation: gradient 10s ease infinite;
+}
+
+.target{
+    background: linear-gradient(-45deg,  #22212d, #2a293a, #bb1c1c);
 	background-size: 400% 400%;
 	animation: gradient 10s ease infinite;
 }
 
 .castbar{
-    padding: 5px;
+    padding: 3px;
     background-color: #d39c05;
     float: left;
     position: relative;
-    margin: 45px 0px 5px 5px;
+    margin: 39px 0px 5px 5px;
     bottom: 0px;
     box-shadow: 0px 0px 5px black;
     z-index: 10;
-    margin-right: -10p;
 }
 
 @keyframes gradient {

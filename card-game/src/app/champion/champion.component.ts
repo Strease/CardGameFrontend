@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
-import { BoardChampion, RestService } from '../rest.service';
+import { BoardAbility, BoardChampion, RestService } from '../rest.service';
 
 @Component({
   selector: 'app-champion',
@@ -8,9 +8,11 @@ import { BoardChampion, RestService } from '../rest.service';
 })
 export class ChampionComponent implements OnInit {
   @Input() boardChampion: BoardChampion;
+  @Input() position: number;
   @Input() pickedAbility: string;
   @Input() target: boolean;
-  @Output() cardClicked = new EventEmitter<string>();
+  @Input() mine: boolean;
+  @Output() cardClicked = new EventEmitter<BoardAbility>();
 
   @Input() playerId: string;
   @Input() gameId: string;
@@ -23,8 +25,8 @@ export class ChampionComponent implements OnInit {
   levelPick: string = '';
 
 
-  callCardClick(ability:string): void {
-    this.cardClicked.next(ability);
+  callCardClick(boardAbility:BoardAbility): void {
+    this.cardClicked.next(boardAbility);
   }
 
   constructor(public rest: RestService) { }
@@ -38,38 +40,6 @@ export class ChampionComponent implements OnInit {
 
   hideTooltip(){
     this.tooltip = null;
-  }
-
-  togglePicksWindow(){
-    if(this.picksShown == true){
-      this.picksShown = false;
-    }else if(this.boardChampion.dinged){
-      this.picksShown = true;
-    }
-    this.levelPick = '';
-  }
-
-  levelUpAbility(abilityId:string){
-    this.rest.levelUpAbility(this.gameId, this.playerId, this.boardChampion.boardChampionId, abilityId, null).subscribe((resp: any) => {
-    });
-  }
-
-  levelUpWeapon(weaponId:string){
-    this.rest.levelUpWeapon(this.gameId, this.playerId, this.boardChampion.boardChampionId, weaponId).subscribe((resp: any) => {
-    });
-  }
-
-  levelUpAbilityFull(abilityId:string){
-    this.levelPick = abilityId;
-  }
-
-  levelUpAbilityRemove(abilityId:string){
-    this.rest.levelUpAbility(this.gameId, this.playerId, this.boardChampion.boardChampionId, this.levelPick, abilityId).subscribe((resp: any) => {
-    });
-  }
-
-  undoPick(){
-    this.levelPick = '';
   }
 
   arrayOne(n: number): any[] {

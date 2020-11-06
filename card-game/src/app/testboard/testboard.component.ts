@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { RestService, Game } from '../rest.service';
+import { RestService } from '../rest.service';
+import { ActivatedRoute } from "@angular/router";
 
 @Component({
   selector: 'app-testboard',
@@ -14,11 +15,13 @@ export class TestboardComponent implements OnInit {
   playerB: string = '00000001-aaaa-1111-2222-bbbbbbbbbbbb';
 
   constructor(
+    private route: ActivatedRoute,
     public rest: RestService) { }
 
   ngOnInit(): void {
     if(localStorage.getItem('gameId') != null){
       this.gameId = localStorage.getItem('gameId');
+      this.playerA = this.route.snapshot.paramMap.get("playerId")
     }
   }
 

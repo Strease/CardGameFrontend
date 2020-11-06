@@ -5,11 +5,11 @@ import { TestboardComponent } from './testboard/testboard.component';
 export const routes: Routes = [
   {
       path: '',
-      redirectTo: '/testboard',
+      redirectTo: '/testboard/1',
       pathMatch: 'full',
   },
   {
-    path: 'testboard',
+    path: 'testboard/:playerId',
     component: TestboardComponent,
-},
+  }
 ];

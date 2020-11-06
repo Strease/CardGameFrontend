@@ -1,77 +1,68 @@
-<div *ngIf="game != null" class="game_container">  
-    <div class="board_container">
-        <div class="board_side">
-            <h2>Team {{ game.opponentPlayerSide }} ({{game.opponentsName}})</h2>
+<div *ngIf="game != null" class="game-container">  
+
+    <div class="board-container">
+        <div class="actions-container">
+            <h2>Up next</h2>
+            <ng-container *ngFor="let boardChampion of game.myBoard; index as i">
+                <ng-container *ngFor="let ability of boardChampion.abilities; index as i">
+                    <img  class="ability-icon"  *ngIf="ability.castTime > 0" src="assets/img/icons/abilities/{{ability.ability.name}}.png">
+                </ng-container>
+            </ng-container>
+            <ng-container *ngFor="let boardChampion of game.opponentsBoard; index as i">
+                <ng-container *ngFor="let ability of boardChampion.abilities; index as i">
+                    <img  class="ability-icon"  *ngIf="ability.castTime > 0" src="assets/img/icons/abilities/{{ability.ability.name}}.png">
+                </ng-container>
+            </ng-container>
+    
+    
+            <h2>History</h2>
+            <div [matTooltip]="log.text" *ngFor="let log of game.gameLogs">
+                <img class="champion-icon player{{log.casterPlayerSide}}" src="assets/img/icons/champions/{{log.caster}}.png">
+                <img class="ability-icon" src="assets/img/icons/abilities/{{log.move}}.png">
+                <img class="champion-icon player{{log.casterPlayerSide}}" src="assets/img/icons/champions/{{log.target}}.png">
+            </div>
+        </div>
+    
+        <div class="boardside">
             <ng-container *ngFor="let boardChampion of game.opponentsBoard; index as i" >
                 <app-champion (cardClicked)="cardClicked(boardChampion.boardChampionId, $event)"
-                [boardChampion]="boardChampion" 
-                [target]="boardChampion.boardChampionId === game.myTarget"></app-champion>
+                [boardChampion]="boardChampion" [position]="i"></app-champion>
             </ng-container>
         </div>
 
-        <div class="guide_container">
+        <div class="guide-container">
             <ng-container *ngIf="game.turnstate === 'PICKING'">
-                <h2 *ngIf="game.myAbility === null">Pick an ability</h2>
-                <h2 *ngIf="game.myAbility != null">Waiting..</h2>
-            </ng-container>     
+                <h2 *ngIf="pickedAbility">Ability: {{ pickedAbility.ability.name }}</h2>
+                <h2 *ngIf="targetType">TargetType:  {{ targetType }}</h2>
+            </ng-container>    
             
-            <ng-container *ngIf="game.turnstate === 'TARGETING'">
-                <h2 *ngIf="game.myAbilityResult != null && game.myAbilityResult != 'AUTO' && game.myAbilityResult != 'NONE' && game.myTarget === null">Pick a {{ game.myAbilityResult }} target</h2>
-                <h2 *ngIf="game.myAbilityResult === null || game.myAbilityResult === 'AUTO' || game.myAbilityResult === 'NONE'">Waiting for opponent..</h2>
+            <h2>Turn {{game.turnCounter}}</h2>
+            <ng-container *ngFor="let boardChampion of game.myBoard; index as i">
+                <ng-container *ngFor="let ability of boardChampion.abilities; index as i">
+                    <img  class="ability-icon"  *ngIf="ability.castTime == 0" src="assets/img/icons/abilities/{{ability.ability.name}}.png">
+                </ng-container>
             </ng-container>
+            <ng-container *ngFor="let boardChampion of game.opponentsBoard; index as i">
+                <ng-container *ngFor="let ability of boardChampion.abilities; index as i">
+                    <img  class="ability-icon" *ngIf="ability.castTime == 0" src="assets/img/icons/abilities/{{ability.ability.name}}.png">
+                </ng-container>
+            </ng-container>
+            <button class="pass-button" *ngIf="game.turnstate === 'PICKING'" [ngClass]="{ended : game.myEndedState}" mat-raised-button (click)="endTurn()">{{ game.myEndedState ?  'Turn ended' : 'End turn'}}</button>
         </div>
 
-        <div class="board_side my_board">
-
+        <div class="board-side my-board">
             <ng-container *ngIf="game.turnstate === 'RECRUITING'">
                 <h2>Pick your team:</h2>
-                <mat-card class="recruitChampion" *ngFor="let champion of playerCollection; index as i" mat-raised-button (click)="recruitChampion(champion.championId)">
+                <mat-card [ngStyle]="{'background-image': 'url( assets/img/champions/' +  champion.name + '.png)'}" class="recruit-champion" *ngFor="let champion of playerCollection; index as i" mat-raised-button (click)="recruitChampion(champion.championId)">
                    <h2>{{champion.name}}</h2>
                 </mat-card>
+                <br/>
             </ng-container>
 
             <ng-container *ngFor="let boardChampion of game.myBoard; index as i" >
-                <app-champion (cardClicked)="cardClicked(boardChampion.boardChampionId, $event)" 
-            [boardChampion]="boardChampion" [gameId]="id" [playerId]="playerId" [pickedAbility]="boardChampion.boardChampionId === game.myUsedChampion ? game.myAbility.ability.name : null "></app-champion>
+                <app-champion (cardClicked)="cardClicked(boardChampion.boardChampionId, $event)" [position]="i+3"
+            [boardChampion]="boardChampion" [gameId]="id" [playerId]="playerId" [mine]="true" [pickedAbility]="boardChampion.boardChampionId === game.myUsedChampion ? game.myAbility.ability.name : null "></app-champion>
             </ng-container>
-            <br/>
-            <button class="pass-button" *ngIf="game.turnstate === 'PICKING'" mat-raised-button (click)="passTurn()">Pass turn</button>
-            <h2>Team {{ game.myPlayerSide }} (My team)</h2>
         </div>     
     </div>
-
-    <div class="actions_container">
-        <h2>Up next -----</h2>
-        <ng-container *ngFor="let boardChampion of game.myBoard; index as i">
-            <ng-container *ngFor="let ability of boardChampion.abilities; index as i">
-                <img  class="ability-icon"  *ngIf="ability.castTime > 0" src="assets/img/icons/abilities/{{ability.ability.name}}.png">
-            </ng-container>
-        </ng-container>
-        <ng-container *ngFor="let boardChampion of game.opponentsBoard; index as i">
-            <ng-container *ngFor="let ability of boardChampion.abilities; index as i">
-                <img  class="ability-icon"  *ngIf="ability.castTime > 0" src="assets/img/icons/abilities/{{ability.ability.name}}.png">
-            </ng-container>
-        </ng-container>
-
-        <h2>This turn -----</h2>
-        <ng-container *ngFor="let boardChampion of game.myBoard; index as i">
-            <ng-container *ngFor="let ability of boardChampion.abilities; index as i">
-                <img  class="ability-icon"  *ngIf="ability.castTime == 0" src="assets/img/icons/abilities/{{ability.ability.name}}.png">
-            </ng-container>
-        </ng-container>
-        <ng-container *ngFor="let boardChampion of game.opponentsBoard; index as i">
-            <ng-container *ngFor="let ability of boardChampion.abilities; index as i">
-                <img  class="ability-icon" *ngIf="ability.castTime == 0" src="assets/img/icons/abilities/{{ability.ability.name}}.png">
-            </ng-container>
-        </ng-container>
-
-        <h2>History</h2>
-        <div [matTooltip]="log.text" *ngFor="let log of game.gameLogs">
-            <img class="champion-icon" src="assets/img/icons/champions/{{log.caster}}.png" [ngClass]="{playerA : log.casterPlayerSide == 'A', playerB : log.casterPlayerSide == 'B' }">
-            <img class="ability-icon" src="assets/img/icons/abilities/{{log.move}}.png">
-            <img class="champion-icon" src="assets/img/icons/champions/{{log.target}}.png" [ngClass]="{playerA : log.targetPlayerSide == 'A', playerB : log.targetPlayerSide == 'B' }">
-        </div>
-    </div>
-
 </div>
-<br/>

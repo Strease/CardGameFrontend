@@ -30,6 +30,17 @@ export class BoardChampion{
   dinged: boolean;
 }
 
+export class BoardAbility{
+  boardAbilityId: string = '';
+  cooldownCounter: number;
+  ability: Ability;
+}
+
+export class Ability{
+  abilityId: number;
+  targetType: string;
+}
+
 const endpoint = 'http://localhost:8080/';
 
 @Injectable({
@@ -74,68 +85,26 @@ export class RestService {
     );
   }
 
-  passTurn(gameId:string, playerId: string): Observable<any> {
+  endTurn(gameId:string, playerId: string): Observable<any> {
     let requestBody = {
       "gameId": gameId, 
-      "playerId": playerId,
-      "championdId": null,
-      "abilityId": null
+      "playerId": playerId
     }
-    return this.http.post(endpoint + 'game/pickturn/', requestBody).pipe(
+    return this.http.post(endpoint + 'game/endturn/', requestBody).pipe(
       catchError(this.handleError)
     );
   }
 
 
-  pickTurn(gameId:string, playerId: string, championdId: string, abilityId:string): Observable<any> {
+  pickTurn(gameId:string, playerId: string, championdId: string, targetId: string, abilityId:string): Observable<any> {
     let requestBody = {
       "gameId": gameId, 
       "playerId": playerId,
       "championId": championdId,
+      "targetId": targetId,
       "abilityId": abilityId
     }
     return this.http.post(endpoint + 'game/pickturn/', requestBody).pipe(
-      catchError(this.handleError)
-    );
-  }
-
-  levelUpAbility(gameId:string, playerId:string, championId: string, pickId: string, removeId:string): Observable<any> {
-    let requestBody = {
-      "gameId": gameId,
-      "playerId": playerId,
-      "championId": championId,
-      "pick": pickId,
-      "remove": removeId,
-      "type": "ability"
-    }
-    console.log(requestBody);
-    return this.http.post(endpoint + 'game/levelup/', requestBody).pipe(
-      catchError(this.handleError)
-    );
-  }
-
-  levelUpWeapon(gameId:string, playerId:string, championId: string, pickId: string): Observable<any> {
-    let requestBody = {
-      "gameId": gameId,
-      "playerId": playerId,
-      "championId": championId,
-      "pick": pickId,
-      "type": "weapon"
-    }
-    console.log(requestBody);
-    return this.http.post(endpoint + 'game/levelup/', requestBody).pipe(
-      catchError(this.handleError)
-    );
-  }
-
-
-  targetTurn(gameId:string, playerId: string, targetId: string): Observable<any> {
-    let requestBody = {
-      "gameId": gameId, 
-      "playerId": playerId, 
-      "targetId": targetId
-    }
-    return this.http.post(endpoint + 'game/targetturn/', requestBody).pipe(
       catchError(this.handleError)
     );
   }
